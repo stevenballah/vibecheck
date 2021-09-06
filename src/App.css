@@ -1,0 +1,52 @@
+.App {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+.logo {
+  width: 7.5rem;
+  height: auto;
+}
+.banner-svg {
+  width: 30rem;
+  height: auto;
+  position: absolute;
+  bottom: -30%;
+  right: -30%;
+  z-index: -1;
+}
+.wave {
+  position: absolute;
+  width: 100%;
+  bottom: -10%;
+  right: 0;
+  z-index: 1;
+}
+.banner-body {
+  z-index: 10;
+}
+.card-img {
+  width: 128px;
+  height: 128px;
+}
+
+@media only screen and (max-width: 767px) {
+  .wave {
+    position: absolute;
+    width: 800px;
+    bottom: -10%;
+    right: 0;
+    z-index: 1;
+  }
+}
+
+@media only screen and (min-width: 2000px) {
+  .banner-svg {
+    width: 30rem;
+    height: auto;
+    position: absolute;
+    bottom: -50%;
+    right: -30%;
+    z-index: -1;
+  }
+}
