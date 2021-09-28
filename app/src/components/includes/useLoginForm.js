@@ -33,25 +33,29 @@ const useLoginForm = (validate) => {
 
   useEffect(() => {
     if (Object.keys(errors).length === 0 && isSubmitted) {
-      //IF THERE ARE NO ERRORS VERIFY USER
-      const verified = verifyUser(fields.email, fields.password);
-      if (verified === true) {
-        console.log("LOG IN USER");
-        setUserLoggedIn(true);
 
-        //RESET THE FIELDS
-        setFields({
-          email: "",
-          password: "",
-        });
+      //IF THERE ARE NO ERRORS VERIFY USER USING ASYNC AWAIT FUNCTION
+      const getUser = async () => {
+        const verify = await verifyUser(fields.email, fields.password);
+        if (verify) {
+          console.log("Logged In | User exists in DB");
+          setUserLoggedIn(true);
 
-        //RESET ERROR MESSAGE
-        errors.login = "";
+          //RESET THE FIELDS
+          setFields({
+            email: "",
+            password: "",
+          });
 
-        loginUser(fields.email);
-        history.push("/profile");
-        return;
+          //RESET ERROR MESSAGE
+          errors.login = "";
+
+          loginUser(fields.email);
+          history.push("/profile");
+          return;
+        }
       }
+      getUser();
       errors.login = "Email and password are incorrect!";
     }
     setSubmitted(false);

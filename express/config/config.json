@@ -1,0 +1,9 @@
+{
+  "development": {
+    "username": "s3843284_fwp_a2",
+    "password": "abc123",
+    "database": "s3843284_fwp_a2",
+    "host": "rmit.australiaeast.cloudapp.azure.com",
+    "dialect": "mysql"
+  }
+}

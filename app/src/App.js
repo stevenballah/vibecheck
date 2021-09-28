@@ -1,6 +1,6 @@
 import './App.css';
 import {BrowserRouter as Router, Route, Switch} from 'react-router-dom';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Nav from'./components/includes/Nav';
 import Footer from'./components/includes/Footer';
 import Home from'./components/pages/Home';
@@ -14,6 +14,7 @@ import NewPost from './components/pages/NewPost';
 import ReplyPost from './components/pages/ReplyPost';
 import DisplayPosts from './components/pages/DisplayPosts';
 import EditPost from './components/pages/EditPost';
+import api from "./api/api";
 function App() {
   const [currentUser, setCurrentUser] = useState(null);
 

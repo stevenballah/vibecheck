@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { getUsers, setUsers } from "./repository";
+import { getUsers, createNewUser } from "./repository";
 import { format } from "date-fns";
 
 const useRegisterForm = (validate) => {
@@ -10,10 +10,8 @@ const useRegisterForm = (validate) => {
       email: "",
       password: "",
       password2: "",
-      date: "",
-      image: "",
-    },
-    getUsers()
+      date: ""
+    }
   );
   const [errors, setErrors] = useState({});
   const [isSubmitted, setSubmitted] = useState(false);
@@ -22,8 +20,8 @@ const useRegisterForm = (validate) => {
   function registerUser(fields) {
     const users = getUsers();
     users[fields.email] = fields;
-    setUsers(users);
     setAccountCreated(true);
+    createNewUser();
   }
 
   const onChangeHandle = (e) => {
@@ -39,6 +37,7 @@ const useRegisterForm = (validate) => {
     e.preventDefault(); //PREVENTS FORM FROM RELOADING WHEN SUBMIT IS PRESSED
     setErrors(validate(fields));
     setSubmitted(true);
+    getUsers();
   };
 
   useEffect(() => {

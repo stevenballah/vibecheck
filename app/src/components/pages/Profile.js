@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import UserContext from "../includes/UserContext";
 import user from "../images/user.png";
@@ -6,8 +6,19 @@ import { getUserInfo } from "../includes/repository";
 
 export default function Profile() {
   const { currentUser } = useContext(UserContext);
-  const userInfo = getUserInfo(currentUser);
 
+  const [userInfo, setUserInfo] = useState([]);
+
+  useEffect(() => {
+    const retrieveUser = async () => {
+      const user = await getUserInfo(currentUser);
+      if (user) setUserInfo(user);
+    };
+
+    retrieveUser();
+  }, []);
+
+  
   return (
     <div className="row position-relative overflow-hidden p-3 p-md-5 m-md-3">
       <div className="container">
