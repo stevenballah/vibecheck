@@ -1,11 +1,10 @@
 import React, { useContext, useState } from "react";
 import UserContext from "../includes/UserContext";
-import { getUserInfo } from "../includes/repository";
 import SettingsModal from "../includes/SettingsModal";
 
 export default function Settings() {
-  const { currentUser } = useContext(UserContext);
-  const userInfo = getUserInfo(currentUser);
+  const { currentUser, userInfo } = useContext(UserContext);
+
   const {
     errors,
     onChangeHandle,

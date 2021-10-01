@@ -1,33 +1,41 @@
 const db = require(".");
 
 module.exports = (sequelize, DataTypes) => {
-    const users = sequelize.define("users", {
-        user_id: {
+    const replies = sequelize.define("replies", {
+        post_id: {
             type: DataTypes.STRING,
             allowNull: false,
             primaryKey: true
+            // references: {
+            //     model: db.posts,
+            //     key: post_id
+            // }
         },
-        firstname: {
+        author: {
             type: DataTypes.STRING,
             allowNull: false
         },
-        lastname: {
+        title: {
             type: DataTypes.STRING,
             allowNull: false
         },
-        email: {
+        message: {
             type: DataTypes.STRING,
             allowNull: false
         },
-        password: {
+        image: {
             type: DataTypes.STRING,
             allowNull: false
         },
-        account_created: {
-            type: DataTypes.DATE,
+        datetime: {
+            type: DataTypes.STRING,
             allowNull: false
         },
-        followers: {
+        likes: {
+            type: DataTypes.INTEGER,
+            allowNull: false
+        },
+        dislikes: {
             type: DataTypes.INTEGER,
             allowNull: false
         }
@@ -35,5 +43,5 @@ module.exports = (sequelize, DataTypes) => {
         // Removes the timestamp attributes (updatedAt, createdAt)
         timestamps: false
     });
-    return users;
+    return replies;
 }

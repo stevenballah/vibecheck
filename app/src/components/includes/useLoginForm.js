@@ -16,6 +16,7 @@ const useLoginForm = (validate) => {
   const [errors, setErrors] = useState({});
   const [isSubmitted, setSubmitted] = useState(false);
   const [isUserLoggedIn, setUserLoggedIn] = useState(false);
+  const [isLoading, setLoading] = useState(false);
 
   const handleSubmit = (e) => {
     e.preventDefault(); //PREVENTS FORM FROM RELOADING WHEN SUBMIT IS PRESSED
@@ -32,36 +33,31 @@ const useLoginForm = (validate) => {
   };
 
   useEffect(() => {
+    //IF THERE ARE NO ERRORS & SUBMITTED VERIFY USER USING ASYNC AWAIT FUNCTION
     if (Object.keys(errors).length === 0 && isSubmitted) {
-
-      //IF THERE ARE NO ERRORS VERIFY USER USING ASYNC AWAIT FUNCTION
       const getUser = async () => {
         const verify = await verifyUser(fields.email, fields.password);
         if (verify) {
+          setLoading(true); //TOGGLE LOADING
           console.log("Logged In | User exists in DB");
           setUserLoggedIn(true);
 
-          //RESET THE FIELDS
-          setFields({
-            email: "",
-            password: "",
-          });
-
-          //RESET ERROR MESSAGE
           errors.login = "";
 
           loginUser(fields.email);
-          history.push("/profile");
-          return;
+          setTimeout(() => {
+            history.push("/profile");
+          }, 500);
         }
       }
       getUser();
+      setLoading(false);  //DISABLE LOADING
       errors.login = "Email and password are incorrect!";
     }
     setSubmitted(false);
   }, [errors, isSubmitted, fields, history, loginUser]);
 
-  return { fields, handleSubmit, onChangeHandle, errors, isUserLoggedIn };
+  return { fields, handleSubmit, onChangeHandle, errors, isUserLoggedIn, isLoading };
 };
 
 export default useLoginForm;

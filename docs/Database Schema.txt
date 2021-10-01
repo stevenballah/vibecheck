@@ -1,0 +1,43 @@
+USER
+user_id VARCHAR(30) {PK}
+firstname VARCHAR(30)
+lastname VARCHAR(30)
+email VARCHAR(32)
+password VARCHAR(30)
+profile_pic_url VARCHAR(30)
+dateCreated DATE
+
+POSTS
+post_id VARCHAR(30) {PK}
+user_id VARCHAR(30) {FK}
+title VARCHAR(30)
+message VARCHAR
+image_url VARCHAR(30)
+timestamp DATE
+
+REPLIES
+reply_id VARCHAR(30) {PK}
+post_id VARCHAR(30) {FK}
+user_id VARCHAR(30) {FK}
+message VARCHAR
+timestamp DATE
+
+FOLLOWERS
+follower_id VARCHAR(30) {PK, FK}
+user_id VARCHAR(30) {FK}
+timestamp DATE
+
+FOLLOWING
+following_id VARCHAR(30) {PK, FK}
+user_id VARCHAR(30) {FK}
+timestamp DATE
+
+LIKES
+post_id VARCHAR(30) {PK, FK}
+user_id VARCHAR(30) {FK}
+timestamp DATE
+
+DISLIKES
+post_id VARCHAR(30) {PK, FK}
+user_id VARCHAR(30) {FK}
+timestamp DATE

@@ -1,23 +1,12 @@
-import React, { useContext, useState, useEffect } from "react";
+import React, { useContext } from "react";
 import { Link } from "react-router-dom";
 import UserContext from "../includes/UserContext";
 import user from "../images/user.png";
-import { getUserInfo } from "../includes/repository";
 
 export default function Profile() {
-  const { currentUser } = useContext(UserContext);
+  const { userInfo } = useContext(UserContext);
 
-  const [userInfo, setUserInfo] = useState([]);
-
-  useEffect(() => {
-    const retrieveUser = async () => {
-      const user = await getUserInfo(currentUser);
-      if (user) setUserInfo(user);
-    };
-
-    retrieveUser();
-  }, []);
-
+  console.log(userInfo);
   
   return (
     <div className="row position-relative overflow-hidden p-3 p-md-5 m-md-3">
@@ -42,7 +31,7 @@ export default function Profile() {
                 <p className="mb-0">{userInfo.email}</p>
                 <hr></hr>
                 <p className="mb-0 font-weight-bold">Account created</p>
-                <p className="mb-0">{userInfo.date}</p>
+                <p className="mb-0">{userInfo.account_created}</p>
                 <hr></hr>
                 <Link to="/settings" className="btn btn-primary">
                   <i className="fas fa-cog mr-1"></i>

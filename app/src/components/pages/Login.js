@@ -4,8 +4,14 @@ import useLoginForm from "../includes/useLoginForm";
 import validate from "../includes/loginValidation";
 
 export default function Login() {
-  const { fields, handleSubmit, onChangeHandle, errors, isUserLoggedIn } =
-    useLoginForm(validate);
+  const {
+    fields,
+    handleSubmit,
+    onChangeHandle,
+    errors,
+    isUserLoggedIn,
+    isLoading,
+  } = useLoginForm(validate);
 
   return (
     <div className="container d-flex flex-column min-vh-100">
@@ -21,7 +27,7 @@ export default function Login() {
                   <p className="alert alert-danger">{errors.login}</p>
                 )}
                 {isUserLoggedIn ? (
-                  <p className="alert alert-success">Login Success</p>
+                  <p className="alert alert-success">Logging in</p>
                 ) : null}
               </div>
               <form onSubmit={handleSubmit}>
@@ -51,16 +57,22 @@ export default function Login() {
                     <p className="text-danger">{errors.password}</p>
                   )}
                 </div>
-                <div className="form-group mb-3">
-                  <span className="text-danger"></span>
-                </div>
                 <div className="d-grid">
-                  <button
-                    className="btn btn-primary btn-login text-uppercase w-100"
-                    type="submit"
-                  >
-                    Log in
-                  </button>
+                  {isLoading ? (
+                    <button
+                      className="btn btn-primary btn-login w-100"
+                      type="submit" disabled
+                    >
+                      <span className="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                    </button>
+                  ) : (
+                    <button
+                      className="btn btn-primary btn-login text-uppercase w-100"
+                      type="submit"
+                    >
+                      Log in
+                    </button>
+                  )}
                 </div>
                 <div className="form-group text-center mt-4">
                   <p>

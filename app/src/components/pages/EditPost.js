@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import { getUserInfo } from "../includes/repository";
 import usePostForm from "../includes/usePostForm";
@@ -6,7 +6,7 @@ import user from "../images/user.png";
 
 function EditPost() {
   const { id } = useParams();
-  const { entries, handleSubmit, fields, errors } = usePostForm();
+  const { entries } = usePostForm();
   const [editFields, setEditFields] = useState({
     title: "",
     message: "",

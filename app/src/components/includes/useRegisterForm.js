@@ -1,24 +1,26 @@
 import { useState, useEffect } from "react";
-import { getUsers, createNewUser } from "./repository";
+import { getAllUsers, createNewUser } from "./repository";
 import { format } from "date-fns";
 
 const useRegisterForm = (validate) => {
   const [fields, setFields] = useState(
     {
+      user_id: "",
       firstname: "",
       lastname: "",
       email: "",
       password: "",
-      password2: "",
-      date: ""
+      account_created: "",
+      followers: 0
     }
   );
   const [errors, setErrors] = useState({});
   const [isSubmitted, setSubmitted] = useState(false);
   const [accountCreated, setAccountCreated] = useState(false);
 
+  //CREATE THE NEW USER
   function registerUser(fields) {
-    const users = getUsers();
+    const users = getAllUsers();
     users[fields.email] = fields;
     setAccountCreated(true);
     createNewUser();
@@ -37,12 +39,14 @@ const useRegisterForm = (validate) => {
     e.preventDefault(); //PREVENTS FORM FROM RELOADING WHEN SUBMIT IS PRESSED
     setErrors(validate(fields));
     setSubmitted(true);
-    getUsers();
+    getAllUsers();
   };
 
   useEffect(() => {
     //IF THERE ARE NO ERRORS & FORM IS SUBMITTED
     if (Object.keys(errors).length === 0 && isSubmitted) {
+
+      //CREATE THE USER USING FIELDS
       registerUser(fields);
 
       //RESETS THE TEXT FIELDS AFTER REGISTRATION
@@ -51,8 +55,7 @@ const useRegisterForm = (validate) => {
         lastname: "",
         email: "",
         password: "",
-        password2: "",
-        image: "",
+        password2: ""
       });
       setSubmitted(false);
     }

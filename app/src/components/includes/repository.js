@@ -14,15 +14,16 @@ function initUsers() {
 //   return JSON.parse(localStorage.getItem(USERS_KEY));
 // }
 
-function getUsers() {
-  api.get("/all").then(res => {
-    console.log(res.data);
-  })
+
+//API CALL TO GET ALL USERS IN THE DB
+const getAllUsers = async () => {
+  const res = await api.get("/all");
+  return res.data;
 }
 
 function createNewUser(user_id, firstname, lastname, email, password) {
-  api.post("/new", {user_id: user_id, firstname: firstname, lastname: lastname, email: email, password: password})
-  .then(res => {console.log(res.data)});
+  // api.post("/new", {user_id: user_id, firstname: firstname, lastname: lastname, email: email, password: password})
+  // .then(res => {console.log(res.data)});
 }
 
 // //SETS USERS IN LOCALSTORAGE
@@ -35,9 +36,9 @@ function isEmailRegistered(email) {
 
 }
 
-//RETURNS ALL USER DETAILS BASED ON THE USER
+//API CALL TO GET THE USER DETAILS BASED ON EMAIL
 const getUserInfo = async (email) => {
-  const res = await api.get(`/user/${email}`)
+  const res = await api.get(`/user/${email}`);
   return res.data;
 };
 
@@ -48,6 +49,8 @@ const verifyUser = async (email, password) => {
     if (user[0].password === password) {
       //IF PASSWORD MATCHES RETURN TRUE
       return true;
+    } else {
+      return false;
     }
   }
 }
@@ -75,7 +78,7 @@ function changePassword(email, newPass) {
 
 export {
   initUsers,
-  getUsers,
+  getAllUsers,
   createNewUser,
   isEmailRegistered,
   verifyUser,
