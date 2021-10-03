@@ -27,13 +27,23 @@ module.exports = (sequelize, DataTypes) => {
             type: DataTypes.DATE,
             allowNull: false
         },
-        followers: {
-            type: DataTypes.INTEGER,
+        profile_pic_url: {
+            type: DataTypes.STRING,
             allowNull: false
         }
     }, {
         // Removes the timestamp attributes (updatedAt, createdAt)
         timestamps: false
     });
+
+    //USERS CAN HAVE 1 TO MANY POSTS
+    //https://sequelize.org/master/manual/assocs.html
+    users.associate = models => {
+        users.hasMany(models.posts, {
+            foreignKey: "user_id",
+            onDelete: "cascade"
+        });
+    };
+
     return users;
-}
+};

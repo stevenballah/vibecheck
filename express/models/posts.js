@@ -7,7 +7,7 @@ module.exports = (sequelize, DataTypes) => {
             allowNull: false,
             primaryKey: true
         },
-        author: {
+        user_id: {
             type: DataTypes.STRING,
             allowNull: false
         },
@@ -19,25 +19,27 @@ module.exports = (sequelize, DataTypes) => {
             type: DataTypes.STRING,
             allowNull: false
         },
-        image: {
+        image_url: {
             type: DataTypes.STRING,
             allowNull: false
         },
-        datetime: {
-            type: DataTypes.STRING,
-            allowNull: false
-        },
-        likes: {
-            type: DataTypes.INTEGER,
-            allowNull: false
-        },
-        dislikes: {
-            type: DataTypes.INTEGER,
+        timestamp: {
+            type: DataTypes.DATE,
             allowNull: false
         }
     }, {
         // Removes the timestamp attributes (updatedAt, createdAt)
         timestamps: false
     });
+
+    posts.associate = models => {
+        posts.belongsTo(models.users, {
+            foreignKey: {
+                name: "user_id",
+                allowNull: false
+            }
+        });
+    }
+
     return posts;
 }

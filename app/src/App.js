@@ -44,7 +44,7 @@ function App() {
       };
       retrieveUserInfo();
     }
-  }, [isUserLoggedIn, currentUser]);
+  }, [isUserLoggedIn]);
 
   return (
     <div className="d-flex flex-column min-vh-100">

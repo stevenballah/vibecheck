@@ -18,7 +18,7 @@ router.post("/new", (req, res) => {
     }).then(createUser => res.send(createUser));
 })
 
-// Get single user by id
+// Get single user by email
 router.get("/user/:email", (req, res) => {
     db.users.findAll({
         where: {

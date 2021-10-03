@@ -12,7 +12,7 @@ const useLoginForm = (validate) => {
     email: "",
     password: "",
   });
-  
+
   const [errors, setErrors] = useState({});
   const [isSubmitted, setSubmitted] = useState(false);
   const [isUserLoggedIn, setUserLoggedIn] = useState(false);
@@ -37,27 +37,43 @@ const useLoginForm = (validate) => {
     if (Object.keys(errors).length === 0 && isSubmitted) {
       const getUser = async () => {
         const verify = await verifyUser(fields.email, fields.password);
+
+        //TOGGLE LOADING
+        setLoading(true);
+
         if (verify) {
-          setLoading(true); //TOGGLE LOADING
           console.log("Logged In | User exists in DB");
           setUserLoggedIn(true);
 
-          errors.login = "";
+          //REMOVE ERROR
+          setErrors({ ...errors, login: "" });
 
           loginUser(fields.email);
+
+          //SET A .5s DELAY BEFORE REDIRECTING
           setTimeout(() => {
             history.push("/profile");
           }, 500);
+        } else {
+          //SET ERROR IF EMAIL & PASS DO NO MATCH THE DB (not verified)
+          setErrors({ ...errors, login: "Email and password are incorrect!" });
         }
-      }
+        //DISABLE LOADING
+        setLoading(false);
+      };
       getUser();
-      setLoading(false);  //DISABLE LOADING
-      errors.login = "Email and password are incorrect!";
     }
     setSubmitted(false);
   }, [errors, isSubmitted, fields, history, loginUser]);
 
-  return { fields, handleSubmit, onChangeHandle, errors, isUserLoggedIn, isLoading };
+  return {
+    fields,
+    handleSubmit,
+    onChangeHandle,
+    errors,
+    isUserLoggedIn,
+    isLoading,
+  };
 };
 
 export default useLoginForm;

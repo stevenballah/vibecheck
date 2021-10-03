@@ -3,7 +3,7 @@ import UserContext from "../includes/UserContext";
 import SettingsModal from "../includes/SettingsModal";
 
 export default function Settings() {
-  const { currentUser, userInfo } = useContext(UserContext);
+  const { userInfo } = useContext(UserContext);
 
   const {
     errors,
@@ -13,7 +13,7 @@ export default function Settings() {
     setModal,
     isSuccess,
     setField,
-  } = SettingsModal(currentUser);
+  } = SettingsModal(userInfo.email);
 
   const [image, setImage] = useState("");
   const [loading, setLoading] = useState(false);

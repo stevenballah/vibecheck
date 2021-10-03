@@ -3,17 +3,15 @@ import { useHistory } from "react-router";
 import {
   isEmailRegistered,
   removeUser,
-  getUserInfo,
   updateName,
   updateEmail,
   changePassword,
 } from "./repository";
 import UserContext from "./UserContext";
 
-const SettingsModal = (userInfoEmail) => {
+const SettingsModal = (user) => {
   let history = useHistory();
-  const { logoutUser, currentUser } = useContext(UserContext);
-  const userInfo = getUserInfo(currentUser);
+  const { logoutUser, userInfo } = useContext(UserContext);
   const [errors, setErrors] = useState("");
   const [modal, setModal] = useState("");
   const [isSuccess, setSuccess] = useState(false);
@@ -43,11 +41,11 @@ const SettingsModal = (userInfoEmail) => {
     if (modal === "deleteAccModal") {
       if (!field.email.trim()) {
         setErrors("Please enter the email!");
-      } else if (field.email !== userInfoEmail) {
+      } else if (field.email !== user) {
         setErrors("Email does not match");
-      } else if (field.email && field.email === userInfoEmail) {
+      } else if (field.email && field.email === user) {
         //DELETE THE ACCOUNT
-        removeUser(userInfoEmail);
+        removeUser(user);
         logoutUser();
         history.push("/login");
         window.location.reload();
@@ -59,7 +57,7 @@ const SettingsModal = (userInfoEmail) => {
         setErrors("Please enter the name!");
       } else if (field.firstname && field.lastname) {
         //CHANGE NAME
-        updateName(userInfoEmail, field.firstname, field.lastname);
+        updateName(user, field.firstname, field.lastname);
         setSuccess(true);
       }
     }
@@ -71,7 +69,7 @@ const SettingsModal = (userInfoEmail) => {
         setErrors("This email is taken!");
       } else {
         //CHANGE EMAIL
-        updateEmail(userInfoEmail, field.email);
+        updateEmail(user, field.email);
         history.push("/login");
         window.location.reload();
       }
@@ -92,7 +90,7 @@ const SettingsModal = (userInfoEmail) => {
         setErrors("New password must be atleast 6 characters or more");
       } else {
         //CHANGE PASSWORD
-        changePassword(userInfoEmail, field.password);
+        changePassword(user, field.password);
         setSuccess(true);
       }
     }

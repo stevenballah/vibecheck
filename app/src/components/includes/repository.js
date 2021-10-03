@@ -37,13 +37,13 @@ function isEmailRegistered(email) {
 }
 
 //API CALL TO GET THE USER DETAILS BASED ON EMAIL
-const getUserInfo = async (email) => {
+async function getUserInfo(email) {
   const res = await api.get(`/user/${email}`);
   return res.data;
 };
 
 //FUNCTION TO VERIFY USER AND PASSWORD
-const verifyUser = async (email, password) => {
+async function verifyUser(email, password) {
   const user = await getUserInfo(email);
   if(user[0]) {
     if (user[0].password === password) {
