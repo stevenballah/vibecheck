@@ -1,5 +1,3 @@
-import { isEmailRegistered } from "./repository";
-
 export default function validation(fields) {
   let errors = {};
 
@@ -11,8 +9,6 @@ export default function validation(fields) {
   }
   if (!fields.email.trim()) {
     errors.email = "*Email address is required";
-  } else if (isEmailRegistered(fields.email)) {
-    errors.email = "*Email already exists!";
   }
 
   if (!fields.password.trim()) {

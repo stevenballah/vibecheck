@@ -2,12 +2,19 @@ import React, { useContext } from "react";
 import { Link } from "react-router-dom";
 import UserContext from "../includes/UserContext";
 import user from "../images/user.png";
+import dateformat from "dateformat";
 
 export default function Profile() {
   const { userInfo } = useContext(UserContext);
 
   console.log(userInfo);
   
+  //FORMAT THE DATE FROM DATABASE
+  function formatDate() {
+    const formatDate = dateformat(userInfo.account_created, "mmmm dS, yyyy");
+    return formatDate;
+  }
+
   return (
     <div className="row position-relative overflow-hidden p-3 p-md-5 m-md-3">
       <div className="container">
@@ -35,7 +42,7 @@ export default function Profile() {
                 <p className="mb-0">{userInfo.email}</p>
                 <hr></hr>
                 <p className="mb-0 font-weight-bold">Account created</p>
-                <p className="mb-0">{userInfo.account_created}</p>
+                <p className="mb-0">{formatDate()}</p>
                 <hr></hr>
                 <Link to="/settings" className="btn btn-primary">
                   <i className="fas fa-cog mr-1"></i>

@@ -8,23 +8,28 @@ router.get("/all", (req, res) => {
 });
 
 // Create new user
-router.post("/new", (req, res) => {
-    db.users.create({
+router.post("/new", async (req, res) => {
+    const user = await db.users.create({
         user_id: req.body.user_id,
         firstname: req.body.firstname,
         lastname: req.body.lastname,
         email: req.body.email,
-        password: req.body.password
-    }).then(createUser => res.send(createUser));
+        password: req.body.password,
+        account_created: req.body.account_created,
+        profile_pic_url: req.body.profile_pic_url
+    });
+    res.send(user);
 })
 
 // Get single user by email
-router.get("/user/:email", (req, res) => {
-    db.users.findAll({
+router.get("/user/:email", async (req, res) => {
+    //SELECT A USER WITH EMAIL
+    const user = await db.users.findAll({
         where: {
             email: req.params.email
         }
-    }).then(getUser => res.send(getUser));
+    });
+    res.send(user);
 })
 
 // Delete user
@@ -54,4 +59,5 @@ router.put("/edit/:user_id", (req, res) => {
         
     ).then(() => res.send("changes made"))
 })
+
 module.exports = router;

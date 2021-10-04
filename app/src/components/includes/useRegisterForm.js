@@ -1,6 +1,5 @@
 import { useState, useEffect } from "react";
-import { getAllUsers, createNewUser } from "./repository";
-import { format } from "date-fns";
+import { createNewUser, isEmailRegistered } from "./repository";
 
 const useRegisterForm = (validate) => {
   const [fields, setFields] = useState(
@@ -10,28 +9,20 @@ const useRegisterForm = (validate) => {
       lastname: "",
       email: "",
       password: "",
+      password2: "",
       account_created: "",
-      followers: 0
+      profile_pic_url: ""
     }
   );
   const [errors, setErrors] = useState({});
   const [isSubmitted, setSubmitted] = useState(false);
   const [accountCreated, setAccountCreated] = useState(false);
 
-  //CREATE THE NEW USER
-  function registerUser(fields) {
-    const users = getAllUsers();
-    users[fields.email] = fields;
-    setAccountCreated(true);
-    createNewUser();
-  }
-
   const onChangeHandle = (e) => {
     const { name, value } = e.target;
     setFields({
       ...fields,
-      [name]: value,
-      date: format(new Date(), "dd/MM/yyyy - p"),
+      [name]: value
     });
   };
 
@@ -39,24 +30,36 @@ const useRegisterForm = (validate) => {
     e.preventDefault(); //PREVENTS FORM FROM RELOADING WHEN SUBMIT IS PRESSED
     setErrors(validate(fields));
     setSubmitted(true);
-    getAllUsers();
   };
 
   useEffect(() => {
     //IF THERE ARE NO ERRORS & FORM IS SUBMITTED
     if (Object.keys(errors).length === 0 && isSubmitted) {
 
-      //CREATE THE USER USING FIELDS
-      registerUser(fields);
-
-      //RESETS THE TEXT FIELDS AFTER REGISTRATION
-      setFields({
-        firstname: "",
-        lastname: "",
-        email: "",
-        password: "",
-        password2: ""
-      });
+      const checkEmail = async () => {
+        const user = await isEmailRegistered(fields.email);
+        
+        if (user) {
+          console.log("exists");
+          setErrors({...errors, email: "The email already exists"});
+        } else {
+          //RESETS THE TEXT FIELDS AFTER REGISTRATION
+          setFields({
+            firstname: "",
+            lastname: "",
+            email: "",
+            password: "",
+            password2: ""
+          });
+          
+          //TOGGLE ACCOUNT CREATED TO TRUE
+          setAccountCreated(true);
+          //CREATE THE USER USING FIELDS
+          createNewUser(fields);
+        }
+      }
+      checkEmail();
+      
       setSubmitted(false);
     }
   }, [isSubmitted, errors, fields]);
