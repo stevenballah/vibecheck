@@ -19,32 +19,30 @@ import { getUserInfo } from "./components/includes/repository";
 function App() {
   const [currentUser, setCurrentUser] = useState(null);
   const [userInfo, setUserInfo] = useState([]);
-  const [isUserLoggedIn, setUserLoggedIn] = useState(false);
 
   const loginUser = (user) => {
     setCurrentUser(user);
-    setUserLoggedIn(true);
   };
   const logoutUser = () => {
     setCurrentUser(null);
     setUserInfo([]);  //CLEAR THE DATA FROM useState
-    setUserLoggedIn(false);
   };
 
+  //ONCE USER IS LOGGED IN GET ALL THE USER INFO FROM DB AND STORE IN USESTATE
   useEffect(() => {
-    if (isUserLoggedIn) {
+    if (currentUser !== null) {
       const retrieveUserInfo = async () => {
         try {
           const response = await getUserInfo(currentUser);
           const result = await response;
-          setUserInfo(...result, result[0]);
+          setUserInfo(result);
         } catch (error) {
           console.log(error);
         }
       };
       retrieveUserInfo();
     }
-  }, [isUserLoggedIn]);
+  }, [currentUser]);
 
   return (
     <div className="d-flex flex-column min-vh-100">

@@ -30,7 +30,7 @@ async function getUserInfo(email) {
   return res.data;
 };
 
-//CREATE A NEW USER
+//ADD USER TO DB
 async function createNewUser(fields) {
   const request = {
     user_id: generateUID(),
@@ -42,37 +42,40 @@ async function createNewUser(fields) {
     profile_pic_url: ""
   }
 
-  const response = await api.post("/new", request);
+  const response = await api.post("/signup", request);
 
   return response.data;
 }
 
-//CHECKS IF THE EMAIL IS ALREADY REGISTERED IN THE LOCAL STORAGE
+//CHECKS IF THE EMAIL IS ALREADY REGISTERED
 async function isEmailRegistered(email) {
-  const user = await getUserInfo(email);
-  if(user[0]) {
-    if (user[0].email === email) {
-      //IF EMAIL EXISTS RETURN TRUE
-      return true;
-    } else {
-      return false;
-    }
+  const request = { email: email };
+  const response = await api.post("/checkEmail", request);
+  console.log(response.data);
+  if (response.data) {
+    return true;
+  } else {
+    return false;
   }
 }
 
 //FUNCTION TO VERIFY USER AND PASSWORD
 async function verifyUser(email, password) {
-  const user = await getUserInfo(email);
-  if(user[0]) {
-    if (user[0].password === password) {
-      //IF PASSWORD MATCHES RETURN TRUE
-      return true;
-    } else {
-      return false;
-    }
+  const request = {
+    email: email,
+    password: password
   }
+  const response = await api.post("/login", request);
+  const user = response.data;
+  return user;
 }
 
+//API CALL TO UPLOAD PROFILE PIC
+async function uploadProfilePic(url, user_id) {
+  const value = { profile_pic_url: url };
+  const res = await api.put(`/uploadProfilePic/${user_id}`, value);
+  console.log(res.data);
+};
 
 //REMOVES A USER FROM LOCALSTORAGE
 function removeUser(email) {
@@ -117,4 +120,5 @@ export {
   updateName,
   updateEmail,
   changePassword,
+  uploadProfilePic
 };

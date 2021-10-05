@@ -1,6 +1,7 @@
 import React, { useContext, useState } from "react";
 import UserContext from "../includes/UserContext";
 import SettingsModal from "../includes/SettingsModal";
+import { uploadProfilePic } from "../includes/repository";
 
 export default function Settings() {
   const { userInfo } = useContext(UserContext);
@@ -12,11 +13,11 @@ export default function Settings() {
     field,
     setModal,
     isSuccess,
-    setField,
   } = SettingsModal(userInfo.email);
 
   const [image, setImage] = useState("");
   const [loading, setLoading] = useState(false);
+
   //CALLING A IMGBB FREE IMAGE HOST API
   const uploadImage = async (e) => {
     const files = e.target.files;
@@ -34,13 +35,10 @@ export default function Settings() {
       const file = await result.json();
       const url = file.data.url;
       setImage(url);
-      setLoading(false);
 
-      //SETS THE IMAGE URL TO THE FIELDS
-      setField({
-        ...field,
-        image: url,
-      });
+      uploadProfilePic(url, userInfo.user_id);
+
+      setLoading(false);
     } else {
       return;
     }
@@ -139,7 +137,7 @@ export default function Settings() {
                   htmlFor="input-file"
                   role="button"
                 >
-                  <i className="fas fa-image mr-2"></i>Change Profile Image
+                  <i className="fas fa-image mr-2"></i>Upload
                 </label>
               </div>
             </div>

@@ -42,7 +42,6 @@ const useLoginForm = (validate) => {
         setLoading(true);
 
         if (verify) {
-          console.log("Logged In | User exists in DB");
           setUserLoggedIn(true);
 
           //REMOVE ERROR
