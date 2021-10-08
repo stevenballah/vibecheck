@@ -28,26 +28,32 @@ function App() {
     setUserInfo([]);  //CLEAR THE DATA FROM useState
   };
 
+  const userInfoChanged = async () => {
+    const result = await getUserInfo(currentUser);
+    setUserInfo(result);
+  }
+
   //ONCE USER IS LOGGED IN GET ALL THE USER INFO FROM DB AND STORE IN USESTATE
   useEffect(() => {
     if (currentUser !== null) {
-      const retrieveUserInfo = async () => {
-        try {
-          const response = await getUserInfo(currentUser);
-          const result = await response;
-          setUserInfo(result);
-        } catch (error) {
-          console.log(error);
-        }
-      };
-      retrieveUserInfo();
+      userInfoChanged();
+      // const retrieveUserInfo = async () => {
+      //   try {
+      //     const response = await getUserInfo(currentUser);
+      //     const result = await response;
+      //     setUserInfo(result);
+      //   } catch (error) {
+      //     console.log(error);
+      //   }
+      // };
+      // retrieveUserInfo();
     }
   }, [currentUser]);
 
   return (
     <div className="d-flex flex-column min-vh-100">
       <UserContext.Provider
-        value={{ currentUser, userInfo, loginUser, logoutUser }}
+        value={{ currentUser, userInfo, loginUser, logoutUser, userInfoChanged }}
       >
         <Router>
           <Nav />

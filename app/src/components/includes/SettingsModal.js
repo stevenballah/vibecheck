@@ -23,7 +23,6 @@ const SettingsModal = (user) => {
     oldpassword: "",
     password: "",
     password2: "",
-    image: "",
   });
 
   const onChangeHandle = (e) => {
@@ -34,16 +33,17 @@ const SettingsModal = (user) => {
     });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     setErrors("");
 
     if (modal === "deleteAccModal") {
       if (!field.email.trim()) {
+        console.log(userInfo.email);
         setErrors("Please enter the email!");
-      } else if (field.email !== user) {
+      } else if (field.email !== userInfo.email) {
         setErrors("Email does not match");
-      } else if (field.email && field.email === user) {
+      } else if (field.email && field.email === userInfo.email) {
         //DELETE THE ACCOUNT
         removeUser(user);
         logoutUser();
@@ -65,7 +65,7 @@ const SettingsModal = (user) => {
     if (modal === "editEmailModal") {
       if (!field.email.trim()) {
         setErrors("Please enter the email!");
-      } else if (isEmailRegistered(field.email)) {
+      } else if (await isEmailRegistered(field.email)) {
         setErrors("This email is taken!");
       } else {
         //CHANGE EMAIL
@@ -82,16 +82,22 @@ const SettingsModal = (user) => {
         !field.oldpassword.trim()
       ) {
         setErrors("Passwords are required");
-      } else if (field.oldpassword !== userInfo.password) {
-        setErrors("Old password does not match");
       } else if (field.password2 !== field.password) {
         setErrors("New passwords do not match!");
       } else if (field.password.length < 6) {
         setErrors("New password must be atleast 6 characters or more");
       } else {
         //CHANGE PASSWORD
-        changePassword(user, field.password);
-        setSuccess(true);
+        const pass = await changePassword(
+          user,
+          field.password,
+          field.oldpassword
+        );
+        if (pass) {
+          setSuccess(true);
+        } else {
+          setErrors("Old password is not correct!");
+        }
       }
     }
   };
@@ -105,13 +111,20 @@ const SettingsModal = (user) => {
       oldpassword: "",
       password: "",
       password2: "",
-      image: "",
     });
     setSuccess(false);
     setErrors("");
   }, [modal]);
 
-  return { errors, onChangeHandle, handleSubmit, field, setModal, isSuccess, setField };
+  return {
+    errors,
+    onChangeHandle,
+    handleSubmit,
+    field,
+    setModal,
+    isSuccess,
+    setField,
+  };
 };
 
 export default SettingsModal;

@@ -1,24 +1,22 @@
 import { useState, useContext, useEffect } from "react";
 import { useHistory } from "react-router";
 import UserContext from "./UserContext";
-import { format } from "date-fns";
+import { getAllPosts, createNewPost } from "./repository"
 
 const usePostForm = () => {
   let history = useHistory();
-  const { currentUser } = useContext(UserContext);
-
-  const POSTS_KEY = "posts";
+  const { currentUser, userInfo } = useContext(UserContext);
 
   const [entries, setEntries] = useState([]);
   const [errors, setErrors] = useState("");
 
   const [fields, setFields] = useState({
-    postId: generateId(),
-    author: currentUser,
+    post_id: "",
+    user_id: userInfo.user_id,
     title: "",
     message: "",
-    datetime: getDateTime(),
-    image: "",
+    image_url: "",
+    timestamp: ""
   });
 
   const [image, setImage] = useState("");
@@ -51,59 +49,26 @@ const usePostForm = () => {
       return;
     }
   };
-
-  //GETS THE DATE & TIME
-  function getDateTime() {
-    const datetime = format(new Date(), "MMMM d, yyyy - p");
-    return datetime;
-  }
-
-  //GENERATES A 16 BIT ID TO USE FOR THE POST
-  function generateId() {
-    var length = 16;
-    let chars =
-      "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
-    let str = "";
-    for (let i = 0; i < length; i++) {
-      str += chars.charAt(Math.floor(Math.random() * chars.length));
-    }
-    return str;
-  }
-
-  function initPosts() {
-    if (localStorage.getItem(POSTS_KEY) !== null) return;
-    setEntries([]);
-  }
-
-  function getPostsFromStorage() {
-    initPosts();
-    return JSON.parse(localStorage.getItem(POSTS_KEY));
-  }
-
-  function setPostsToStorage(posts) {
-    localStorage.setItem(POSTS_KEY, JSON.stringify(posts));
-  }
-
+  
   //EFFECT GETS CALLED EVERYTIME THE ARRAY CHANGES WHICH SETS THE STORAGE POSTS IN THE USE STATE
   //PREVENTS REMOVING THE POSTS FROM STORAGE WHEN NEW POST IS MADE AFTER REFRESH
   useEffect(() => {
-    const postsFromStorage = getPostsFromStorage();
-    if (postsFromStorage) {
-      setEntries(postsFromStorage);
+    console.log("USE EFFECT RUN");
+    const getPosts = async () => {
+      const posts = await getAllPosts();
+      if (posts) {
+        setEntries(posts);
+      }
+      console.log(posts);
     }
+    getPosts();
   }, []);
-
-  function createPost(fields) {
-    const newPost = [fields, ...entries];
-    setEntries(newPost);
-    setPostsToStorage(newPost);
-  }
 
   //USES THE INDEX PARAMETER TO DETERMINE THE POST TO DELETE
   const removePost = (index) => {
-    const newPosts = [...entries.slice(0, index), ...entries.slice(index + 1)];
-    setEntries(newPosts);
-    setPostsToStorage(newPosts);
+    // const newPosts = [...entries.slice(0, index), ...entries.slice(index + 1)];
+    // setEntries(newPosts);
+    // setPostsToStorage(newPosts);
   };
 
   const handleDeleteClick = (index) => (e) => {
@@ -118,7 +83,7 @@ const usePostForm = () => {
       setErrors("Please ensure fields are not empty!");
     } else {
       //CREATE THE POST
-      createPost(fields);
+      createNewPost(fields);
       history.push("/forum/posts");
     }
   };
@@ -138,8 +103,6 @@ const usePostForm = () => {
     errors,
     entries,
     handleDeleteClick,
-    getDateTime,
-    getPostsFromStorage,
     image,
     loading,
     uploadImage,

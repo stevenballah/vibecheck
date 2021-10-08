@@ -1,32 +1,15 @@
 import api from "../../api/api";
 const USERS_KEY = "users";
 
-//INITIALISES USERS IF LOCALSTORAGE IS EMPTY
-function initUsers() {
-  if (localStorage.getItem(USERS_KEY) !== null) return;
-
-}
-
-// //GETS USERS FROM LOCALSTORAGE
-// function getUsers() {
-//   initUsers();
-//   return JSON.parse(localStorage.getItem(USERS_KEY));
-// }
-
-// //SETS USERS IN LOCALSTORAGE
-// function setUsers(users) {
-//   localStorage.setItem(USERS_KEY, JSON.stringify(users));
-// }
-
 //API CALL TO GET ALL USERS IN THE DB
 const getAllUsers = async () => {
-  const res = await api.get("/all");
+  const res = await api.get("/users/all");
   return res.data;
 }
 
 //API CALL TO GET THE USER DETAILS BASED ON EMAIL
 async function getUserInfo(email) {
-  const res = await api.get(`/user/${email}`);
+  const res = await api.get(`/users/user/${email}`);
   return res.data;
 };
 
@@ -42,7 +25,7 @@ async function createNewUser(fields) {
     profile_pic_url: ""
   }
 
-  const response = await api.post("/signup", request);
+  const response = await api.post("/users/signup", request);
 
   return response.data;
 }
@@ -50,8 +33,8 @@ async function createNewUser(fields) {
 //CHECKS IF THE EMAIL IS ALREADY REGISTERED
 async function isEmailRegistered(email) {
   const request = { email: email };
-  const response = await api.post("/checkEmail", request);
-  console.log(response.data);
+  const response = await api.post("/users/checkEmail", request);
+  
   if (response.data) {
     return true;
   } else {
@@ -65,7 +48,7 @@ async function verifyUser(email, password) {
     email: email,
     password: password
   }
-  const response = await api.post("/login", request);
+  const response = await api.post("/users/login", request);
   const user = response.data;
   return user;
 }
@@ -73,28 +56,53 @@ async function verifyUser(email, password) {
 //API CALL TO UPLOAD PROFILE PIC
 async function uploadProfilePic(url, user_id) {
   const value = { profile_pic_url: url };
-  const res = await api.put(`/uploadProfilePic/${user_id}`, value);
-  console.log(res.data);
+  await api.put(`/users/uploadProfilePic/${user_id}`, value);
 };
 
 //REMOVES A USER FROM LOCALSTORAGE
-function removeUser(email) {
-
+async function removeUser(user_id) {
+  await api.delete(`/users/delete/${user_id}`);
 }
 
 //UPDATE THE NAME OF USER
-function updateName(email, newFirstname, newLastname) {
-
+async function updateName(user_id, newFirstname, newLastname) {
+  const value = { firstname: newFirstname, lastname: newLastname };
+  await api.put(`/users/edit/name/${user_id}`, value);
 }
 
 //UPDATE THE EMAIL OF USER
-function updateEmail(email, newEmail) {
-
+async function updateEmail(user_id, newEmail) {
+  const value = { email: newEmail };
+  await api.put(`/users/edit/email/${user_id}`, value);
 }
 
 //CHANGES PASSWORD
-function changePassword(email, newPass) {
+async function changePassword(user_id, newPass, oldpassword) {
+  const value = { user_id: user_id, password: newPass, oldpassword: oldpassword };
+  const res = await api.put(`/users/edit/password/${user_id}`, value);
+  return res.data;
+}
 
+//API CALL TO GET ALL POSTS IN THE DB
+async function getAllPosts() {
+  const res = await api.get("/posts/all");
+  return res.data;
+}
+
+//ADD POST TO DB
+async function createNewPost(fields) {
+  const request = {
+    post_id: generatePostID(),
+    user_id: fields.user_id,
+    title: fields.title,
+    message: fields.message,
+    image_url: fields.image_url,
+    timestamp: new Date()
+  }
+
+  const response = await api.post("/posts/new", request);
+
+  return response.data;
 }
 
 //GENERATE A USER ID
@@ -109,8 +117,19 @@ function generateUID() {
   return str;
 }
 
+//GENERATES A 16 BIT ID TO USE FOR THE POST
+function generatePostID() {
+  var length = 16;
+  let chars =
+    "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+  let str = "";
+  for (let i = 0; i < length; i++) {
+    str += chars.charAt(Math.floor(Math.random() * chars.length));
+  }
+  return str;
+}
+
 export {
-  initUsers,
   getAllUsers,
   createNewUser,
   isEmailRegistered,
@@ -120,5 +139,7 @@ export {
   updateName,
   updateEmail,
   changePassword,
-  uploadProfilePic
+  uploadProfilePic,
+  getAllPosts,
+  createNewPost
 };

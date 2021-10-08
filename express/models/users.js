@@ -41,7 +41,7 @@ module.exports = (sequelize, DataTypes) => {
     users.associate = models => {
         users.hasMany(models.posts, {
             foreignKey: "user_id",
-            onDelete: "cascade"
+            onDelete: "CASCADE"
         });
     };
 

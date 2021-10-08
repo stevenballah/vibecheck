@@ -40,7 +40,6 @@ const useRegisterForm = (validate) => {
         const user = await isEmailRegistered(fields.email);
         
         if (user) {
-          console.log("exists");
           setErrors({...errors, email: "The email already exists"});
         } else {
           //RESETS THE TEXT FIELDS AFTER REGISTRATION

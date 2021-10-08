@@ -18,8 +18,8 @@ export default function DisplayPosts() {
       ) : (
         Object.keys(entries).map((x, index) => {
           const post = entries[x];
-          const userInfo = getUserInfo(post.author);
-
+          const userInfo = {firstname: "John"};
+          
           return (
             <div
               className="feed-post bg-light rounded p-3 md-3 mb-3"

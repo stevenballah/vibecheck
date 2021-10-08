@@ -3,21 +3,22 @@ const router = express.Router();
 const db = require("../models");
 
 // Get all posts in the database
-router.get("/all", (req, res) => {
+router.get("/posts/all", (req, res) => {
     db.posts.findAll().then(posts => res.send(posts))
 });
 
 // Create new post
-router.post("/new-post", (req, res) => {
-    db.posts.create({
+router.post("/posts/new", async (req, res) => {
+    const post = await db.posts.create({
         post_id: req.body.post_id,
         user_id: req.body.user_id,
         title: req.body.title,
         message: req.body.message,
         image_url: req.body.image_url,
         timestamp: req.body.timestamp,
-        include: [db.users]
-    }).then(createPost => res.send(createPost));
+        include: [{model: db.users}]
+    });
+    res.send(post);
 })
 
 // Get a single post using ID

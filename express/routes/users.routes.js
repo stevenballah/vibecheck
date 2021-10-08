@@ -4,12 +4,12 @@ const db = require("../models");
 const argon2 = require("argon2");
 
 // Get all users in the database
-router.get("/all", (req, res) => {
+router.get("/users/all", (req, res) => {
     db.users.findAll().then(users => res.send(users))
 });
 
 // Create new user
-router.post("/signup", async (req, res) => {
+router.post("/users/signup", async (req, res) => {
     const hash = await argon2.hash(req.body.password, { type: argon2.argon2id });
 
     const user = await db.users.create({
@@ -25,7 +25,7 @@ router.post("/signup", async (req, res) => {
 })
 
 // Login user
-router.post("/login", async (req, res) => {
+router.post("/users/login", async (req, res) => {
     const user = await db.users.findOne({
         where: {
             email: req.body.email
@@ -40,8 +40,8 @@ router.post("/login", async (req, res) => {
     }
 })
 
-// Check email if registered
-router.post("/checkEmail", async (req, res) => {
+// Check if email is registered (taken)
+router.post("/users/checkEmail", async (req, res) => {
     const user = await db.users.findOne({
         where: {
             email: req.body.email
@@ -57,7 +57,7 @@ router.post("/checkEmail", async (req, res) => {
 })
 
 // Get single user by email
-router.get("/user/:email", async (req, res) => {
+router.get("/users/user/:email", async (req, res) => {
     //SELECT A USER WITH EMAIL
     const user = await db.users.findOne({
         where: {
@@ -68,23 +68,20 @@ router.get("/user/:email", async (req, res) => {
 })
 
 // Delete user
-router.delete("/delete/:user_id", (req, res) => {
+router.delete("/users/delete/:user_id", (req, res) => {
     db.users.destroy({
         where: {
             user_id: req.params.user_id
         }
-    }).then(() => res.send("user deleted"));
+    });
 })
 
-// Update user info
-router.put("/edit/:user_id", (req, res) => {
+// Update firstname and lastname
+router.put("/users/edit/name/:user_id", (req, res) => {
     db.users.update(
         {
-            user_id: req.body.user_id,
             firstname: req.body.firstname,
-            lastname: req.body.lastname,
-            email: req.body.email,
-            password: req.body.password
+            lastname: req.body.lastname
         },
         {
             where: {
@@ -92,11 +89,59 @@ router.put("/edit/:user_id", (req, res) => {
             }
         },
         
-    ).then(() => res.send("changes made"))
+    );
+})
+
+// Update email
+router.put("/users/edit/email/:user_id", (req, res) => {
+    db.users.update(
+        {
+            email: req.body.email
+        },
+        {
+            where: {
+                user_id: req.params.user_id
+            }
+        },
+        
+    );
+})
+
+// Update password
+router.put("/users/edit/password/:user_id", async (req, res) => {
+    //GET THE USER BASED ON USER_ID
+    const user = await db.users.findOne({
+        where: {
+            user_id: req.body.user_id
+        }
+    });
+
+    //VERIFY PASSWORD
+    if (user === null || await argon2.verify(user.password, req.body.oldpassword) === false) {
+        res.send(false);
+    } else {
+        //IF VERIFY PASSES UPDATE
+
+        const hash = await argon2.hash(req.body.password, { type: argon2.argon2id });
+
+        db.users.update(
+            {
+                password: hash
+            },
+            {
+                where: {
+                    user_id: req.params.user_id
+                }
+            },
+            
+        );
+        res.send(true);
+    }
+    
 })
 
 // Update profile picture
-router.put("/uploadProfilePic/:user_id", (req, res) => {
+router.put("/users/uploadProfilePic/:user_id", (req, res) => {
     db.users.update(
         {
             profile_pic_url: req.body.profile_pic_url

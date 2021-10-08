@@ -6,14 +6,8 @@ import { uploadProfilePic } from "../includes/repository";
 export default function Settings() {
   const { userInfo } = useContext(UserContext);
 
-  const {
-    errors,
-    onChangeHandle,
-    handleSubmit,
-    field,
-    setModal,
-    isSuccess,
-  } = SettingsModal(userInfo.email);
+  const { errors, onChangeHandle, handleSubmit, field, setModal, isSuccess } =
+    SettingsModal(userInfo.user_id);
 
   const [image, setImage] = useState("");
   const [loading, setLoading] = useState(false);
@@ -116,9 +110,9 @@ export default function Settings() {
                 ) : (
                   <div className="image-preview text-center my-3">
                     <img
-                      src={image}
+                      src={userInfo.profile_pic_url}
                       className="rounded img-fluid"
-                      alt={image}
+                      alt="user"
                     ></img>
                   </div>
                 )}

@@ -8,7 +8,7 @@ export default function Profile() {
   const { userInfo } = useContext(UserContext);
 
   console.log(userInfo);
-  
+
   //FORMAT THE DATE FROM DATABASE
   function formatDate() {
     const formatDate = dateformat(userInfo.account_created, "mmmm dS, yyyy");
@@ -27,10 +27,14 @@ export default function Profile() {
             <div className="row">
               <div className="col-sm-3">
                 {userInfo.profile_pic_url ? (
-                  <img src={userInfo.profile_pic_url} alt="user" className="w-100 profile-pic"></img>
+                  <img
+                    src={userInfo.profile_pic_url}
+                    alt="user"
+                    className="w-100 profile-pic"
+                  ></img>
                 ) : (
                   <img src={user} alt="user" className="w-100"></img>
-                ) }
+                )}
               </div>
               <div className="col-sm-6">
                 <p className="mb-0 font-weight-bold">Full Name</p>
