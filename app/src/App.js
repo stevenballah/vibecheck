@@ -34,26 +34,17 @@ function App() {
   }
 
   //ONCE USER IS LOGGED IN GET ALL THE USER INFO FROM DB AND STORE IN USESTATE
+  //THIS ALLOW USER INFO TO BE GLOBALLY ACCESSIBLE
   useEffect(() => {
     if (currentUser !== null) {
       userInfoChanged();
-      // const retrieveUserInfo = async () => {
-      //   try {
-      //     const response = await getUserInfo(currentUser);
-      //     const result = await response;
-      //     setUserInfo(result);
-      //   } catch (error) {
-      //     console.log(error);
-      //   }
-      // };
-      // retrieveUserInfo();
     }
   }, [currentUser]);
 
   return (
     <div className="d-flex flex-column min-vh-100">
       <UserContext.Provider
-        value={{ currentUser, userInfo, loginUser, logoutUser, userInfoChanged }}
+        value={{ currentUser, userInfo, loginUser, logoutUser, setUserInfo }}
       >
         <Router>
           <Nav />

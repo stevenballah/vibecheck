@@ -4,7 +4,7 @@ import SettingsModal from "../includes/SettingsModal";
 import { uploadProfilePic } from "../includes/repository";
 
 export default function Settings() {
-  const { userInfo } = useContext(UserContext);
+  const { userInfo, setUserInfo } = useContext(UserContext);
 
   const { errors, onChangeHandle, handleSubmit, field, setModal, isSuccess } =
     SettingsModal(userInfo.user_id);
@@ -31,6 +31,7 @@ export default function Settings() {
       setImage(url);
 
       uploadProfilePic(url, userInfo.user_id);
+      setUserInfo({ ...userInfo, profile_pic_url: url });
 
       setLoading(false);
     } else {
@@ -109,11 +110,14 @@ export default function Settings() {
                   <p>Image uploading...</p>
                 ) : (
                   <div className="image-preview text-center my-3">
-                    <img
+                    {userInfo.profile_pic_url ? (
+                      <img
                       src={userInfo.profile_pic_url}
                       className="rounded img-fluid"
                       alt="user"
                     ></img>
+                    ) : <p className="text-left mb-0">We recommend an image of atleast 400x400. You can upload a PNG, JPG or GIF</p>}
+                    
                   </div>
                 )}
               </div>

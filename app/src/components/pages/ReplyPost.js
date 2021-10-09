@@ -1,9 +1,9 @@
 import React from "react";
 import { Link, useParams } from "react-router-dom";
-import { getUserInfo } from "../includes/repository";
 import usePostForm from "../includes/usePostForm";
 import user from "../images/user.png";
 import useReplyForm from "../includes/useReplyForm";
+import dateformat from "dateformat";
 
 function ReplyPost() {
   const { onChangeHandle, handleSubmit, errors, fields, replies } =
@@ -19,24 +19,23 @@ function ReplyPost() {
       </Link>
 
       {entries.map((post, index) => {
-        const storagePostId = post.postId;
-        const userInfo = getUserInfo(post.author);
+        const currentPostId = post.post_id;
 
-        if (id === storagePostId) {
+        if (id === currentPostId) {
           return (
             <div
               className="feed-post bg-light rounded p-3 md-3 mb-3"
               key={index}
             >
-              <div className="post-author">
+              <div className="post-author profile">
                 <div className="row mx-1">
                   <div className="col-sm-2 col-md-2 col-lg-1">
-                    <img src={user} alt="user" className="w-100"></img>
+                    <img src={post.user.profile_pic_url} alt="user" className="w-100 profile-pic"></img>
                   </div>
                   <p className="mb-0 my-auto font">
-                    {userInfo.firstname} {userInfo.lastname} posted
+                    {post.user.firstname} {post.user.lastname} posted
                   </p>
-                  <p className="mb-0 my-auto ml-auto">{post.datetime}</p>
+                  <p className="mb-0 my-auto ml-auto">{dateformat(post.timestamp, "mmmm dS, yyyy - h:MM TT")}</p>
                 </div>
                 <hr></hr>
               </div>
@@ -79,10 +78,9 @@ function ReplyPost() {
       })}
 
       {replies.map((reply, index) => {
-        const storagePostId = reply.replyto;
-        const userInfo = getUserInfo(reply.author);
+        const currentPostId = reply.replyto;
 
-        if (id === storagePostId) {
+        if (id === currentPostId) {
           return (
             <div
               className="reply-group bg-light rounded p-3 md-3 mb-3"
@@ -94,7 +92,7 @@ function ReplyPost() {
                     <img src={user} alt="user" className="w-100"></img>
                   </div>
                   <p className="mb-0 my-auto font">
-                    {userInfo.firstname} {userInfo.lastname} replied
+                    {reply.user.firstname} {reply.user.lastname} replied
                   </p>
                   <p className="mb-0 my-auto ml-auto">{reply.datetime}</p>
                 </div>

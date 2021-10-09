@@ -11,7 +11,7 @@ import UserContext from "./UserContext";
 
 const SettingsModal = (user) => {
   let history = useHistory();
-  const { logoutUser, userInfo } = useContext(UserContext);
+  const { logoutUser, userInfo, setUserInfo } = useContext(UserContext);
   const [errors, setErrors] = useState("");
   const [modal, setModal] = useState("");
   const [isSuccess, setSuccess] = useState(false);
@@ -39,7 +39,6 @@ const SettingsModal = (user) => {
 
     if (modal === "deleteAccModal") {
       if (!field.email.trim()) {
-        console.log(userInfo.email);
         setErrors("Please enter the email!");
       } else if (field.email !== userInfo.email) {
         setErrors("Email does not match");
@@ -58,6 +57,11 @@ const SettingsModal = (user) => {
       } else if (field.firstname && field.lastname) {
         //CHANGE NAME
         updateName(user, field.firstname, field.lastname);
+        setUserInfo({
+          ...userInfo,
+          firstname: field.firstname,
+          lastname: field.lastname,
+        });
         setSuccess(true);
       }
     }
@@ -70,8 +74,8 @@ const SettingsModal = (user) => {
       } else {
         //CHANGE EMAIL
         updateEmail(user, field.email);
-        history.push("/login");
-        window.location.reload();
+        setUserInfo({ ...userInfo, email: field.email });
+        setSuccess(true);
       }
     }
 

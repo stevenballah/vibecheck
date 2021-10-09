@@ -40,8 +40,7 @@ module.exports = (sequelize, DataTypes) => {
     //https://sequelize.org/master/manual/assocs.html
     users.associate = models => {
         users.hasMany(models.posts, {
-            foreignKey: "user_id",
-            onDelete: "CASCADE"
+            foreignKey: "user_id"
         });
     };
 

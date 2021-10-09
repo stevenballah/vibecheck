@@ -2,10 +2,14 @@ const db = require(".");
 
 module.exports = (sequelize, DataTypes) => {
     const posts = sequelize.define("posts", {
+        id: {
+            type: DataTypes.INTEGER,
+            autoIncrement: true,
+            primaryKey: true
+        },
         post_id: {
             type: DataTypes.STRING,
             allowNull: false,
-            primaryKey: true
         },
         user_id: {
             type: DataTypes.STRING,
@@ -40,6 +44,14 @@ module.exports = (sequelize, DataTypes) => {
             }
         });
     }
+
+    // posts.associate = models => {
+    //     posts.belongsToMany(models.replies, {
+    //         through: "post_replies",
+    //         as: "postid",
+    //         foreignKey: "post_id"
+    //     });
+    // };
 
     return posts;
 }

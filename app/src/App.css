@@ -31,9 +31,10 @@
 }
 
 .profile-pic {
-  width: 50%;
+  width: 15rem;
   height: auto;
-  border-radius: 50%;
+  border-radius:50%;
+  overflow:hidden;
 }
 
 @media only screen and (max-width: 767px) {

@@ -15,10 +15,6 @@ module.exports = (sequelize, DataTypes) => {
             type: DataTypes.STRING,
             allowNull: false,
         },
-        title: {
-            type: DataTypes.STRING,
-            allowNull: false
-        },
         message: {
             type: DataTypes.STRING,
             allowNull: false
@@ -32,6 +28,13 @@ module.exports = (sequelize, DataTypes) => {
         timestamps: false
     });
 
+    // replies.associate = models => {
+    //     replies.belongsToMany(models.posts, {
+    //         through: "post_replies",
+    //         as: "replyid",
+    //         foreignKey: "reply_id"
+    //     });
+    // }
 
     return replies;
 }

@@ -27,11 +27,14 @@ export default function Profile() {
             <div className="row">
               <div className="col-sm-3">
                 {userInfo.profile_pic_url ? (
-                  <img
-                    src={userInfo.profile_pic_url}
-                    alt="user"
-                    className="w-100 profile-pic"
-                  ></img>
+                  <div className="profile-pic">
+                    <img
+                      src={userInfo.profile_pic_url}
+                      alt="user"
+                      className="w-100"
+                    ></img>
+                  </div>
+                  
                 ) : (
                   <img src={user} alt="user" className="w-100"></img>
                 )}

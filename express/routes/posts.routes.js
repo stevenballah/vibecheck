@@ -3,8 +3,11 @@ const router = express.Router();
 const db = require("../models");
 
 // Get all posts in the database
-router.get("/posts/all", (req, res) => {
-    db.posts.findAll().then(posts => res.send(posts))
+router.get("/posts/all", async (req, res) => {
+    const posts = await db.posts.findAll({
+        include: [{model: db.users, as: "user"}]
+    });
+    res.send(posts);
 });
 
 // Create new post
@@ -15,8 +18,7 @@ router.post("/posts/new", async (req, res) => {
         title: req.body.title,
         message: req.body.message,
         image_url: req.body.image_url,
-        timestamp: req.body.timestamp,
-        include: [{model: db.users}]
+        timestamp: req.body.timestamp
     });
     res.send(post);
 })

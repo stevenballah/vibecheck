@@ -50,10 +50,8 @@ const usePostForm = () => {
     }
   };
   
-  //EFFECT GETS CALLED EVERYTIME THE ARRAY CHANGES WHICH SETS THE STORAGE POSTS IN THE USE STATE
-  //PREVENTS REMOVING THE POSTS FROM STORAGE WHEN NEW POST IS MADE AFTER REFRESH
+  //USE EFFECT GETS CALLED ONCE TO GET ALL POSTS FROM DB
   useEffect(() => {
-    console.log("USE EFFECT RUN");
     const getPosts = async () => {
       const posts = await getAllPosts();
       if (posts) {
@@ -75,16 +73,18 @@ const usePostForm = () => {
     removePost(index);
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault(); //PREVENTS FORM FROM RELOADING WHEN SUBMIT IS PRESSED
     if (!currentUser) {
       setErrors("Only logged in users can make a post!");
     } else if (!fields.title.trim() || !fields.message.trim()) {
       setErrors("Please ensure fields are not empty!");
     } else {
-      //CREATE THE POST
-      createNewPost(fields);
-      history.push("/forum/posts");
+      //CREATE THE POST THEN REDIRECT TO ALL POSTS
+      if (await createNewPost(fields)){
+        history.push("/forum/posts");
+      }
+      
     }
   };
 

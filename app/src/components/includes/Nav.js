@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 import UserContext from "./UserContext";
 
 export default function Nav() {
-  const { currentUser, logoutUser } = useContext(UserContext);
+  const { userInfo, logoutUser, currentUser } = useContext(UserContext);
 
   return (
     <nav className="navbar navbar-expand-lg navbar-light bg-light shadow-sm border-bottom ">
@@ -61,7 +61,7 @@ export default function Nav() {
                 aria-expanded="false"
               >
                 {" "}
-                {currentUser}{" "}
+                {userInfo.email}{" "}
               </a>
               <div className="dropdown-menu">
                 <Link to="/profile" className="dropdown-item">

@@ -1,9 +1,9 @@
 import React, { useContext } from "react";
-import { getUserInfo } from "../includes/repository";
 import usePostForm from "../includes/usePostForm";
 import UserContext from "../includes/UserContext";
 import user from "../images/user.png";
 import { Link } from "react-router-dom";
+import dateformat from "dateformat";
 
 export default function DisplayPosts() {
   const { entries, handleDeleteClick } = usePostForm();
@@ -18,7 +18,6 @@ export default function DisplayPosts() {
       ) : (
         Object.keys(entries).map((x, index) => {
           const post = entries[x];
-          const userInfo = {firstname: "John"};
           
           return (
             <div
@@ -28,12 +27,12 @@ export default function DisplayPosts() {
               <div className="post-author">
                 <div className="row mx-1">
                   <div className="col-sm-2 col-md-2 col-lg-1">
-                    <img src={user} alt="user" className="w-100"></img>
+                    <img src={post.user.profile_pic_url ? post.user.profile_pic_url : user} alt="user" className="w-100 profile-pic"></img>
                   </div>
                   <p className="mb-0 my-auto font">
-                    {userInfo.firstname} {userInfo.lastname}
+                    {post.user.firstname} {post.user.lastname}
                   </p>
-                  <p className="mb-0 my-auto ml-auto">{post.datetime}</p>
+                  <p className="mb-0 my-auto ml-auto">{dateformat(post.timestamp, "mmmm dS, yyyy - h:MM TT")}</p>
                 </div>
                 <hr></hr>
               </div>
@@ -50,7 +49,7 @@ export default function DisplayPosts() {
               ) : null}
               <div className="row px-3 post-details">
                 {/* IF SIGNED IN AND IS AUTHOR SHOW DELETE, EDIT AND REPLY */}
-                {currentUser && post.author === currentUser ? (
+                {currentUser && post.user.email === currentUser ? (
                   <div className="ml-auto">
                     <button className="btn btn-danger mr-2" onClick={handleDeleteClick(index)}>
                       <i
@@ -62,7 +61,7 @@ export default function DisplayPosts() {
                         <i className="fas fa-pen"></i>
                       </button>
                     </Link>
-                    <Link to={`/forum/posts/${post.postId}`}>
+                    <Link to={`/forum/posts/${post.post_id}`}>
                       <button className="btn btn-primary">
                         <p className="mb-0">
                           <i className="fas fa-reply mr-2"></i>Reply
@@ -73,9 +72,9 @@ export default function DisplayPosts() {
                 ) : null}
 
                 {/* IF SIGNED IN BUT NOT THE AUTHOR SHOW REPLY */}
-                {currentUser && post.author !== currentUser ? (
+                {currentUser && post.user.email !== currentUser ? (
                   <div className="ml-auto">
-                    <Link to={`/forum/posts/${post.postId}`}>
+                    <Link to={`/forum/posts/${post.post_id}`}>
                       <button className="btn btn-primary">
                         <p className="mb-0">
                           <i className="fas fa-reply mr-2"></i>Reply
