@@ -22,7 +22,7 @@ async function createNewUser(fields) {
     email: fields.email,
     password: fields.password,
     account_created: new Date(),
-    profile_pic_url: ""
+    profile_pic_url: null
   }
 
   const response = await api.post("/users/signup", request);
@@ -105,6 +105,27 @@ async function createNewPost(fields) {
   return response.data;
 }
 
+//ADD REPLY TO DB
+async function createNewReply(fields) {
+  const request = {
+    reply_id: generatePostID(),
+    post_id: fields.post_id,
+    user_id: fields.user_id,
+    message: fields.message,
+    timestamp: new Date()
+  }
+
+  const response = await api.post("/replies/new", request);
+
+  return response.data;
+}
+
+//API CALL TO GET THE REPLIES TO A POST
+async function getReplies(post_id) {
+  const res = await api.get(`/replies/${post_id}`);
+  return res.data;
+};
+
 //GENERATE A USER ID
 function generateUID() {
   var length = 10;
@@ -141,5 +162,7 @@ export {
   changePassword,
   uploadProfilePic,
   getAllPosts,
-  createNewPost
+  createNewPost,
+  createNewReply,
+  getReplies
 };

@@ -15,7 +15,7 @@ const usePostForm = () => {
     user_id: userInfo.user_id,
     title: "",
     message: "",
-    image_url: "",
+    image_url: null,
     timestamp: ""
   });
 
@@ -41,10 +41,7 @@ const usePostForm = () => {
       setLoading(false);
 
       //SETS THE IMAGE URL TO THE FIELDS
-      setFields({
-        ...fields,
-        image: url,
-      });
+      setFields({...fields, image_url: url});
     } else {
       return;
     }

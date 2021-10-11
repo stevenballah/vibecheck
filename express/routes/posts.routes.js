@@ -5,7 +5,7 @@ const db = require("../models");
 // Get all posts in the database
 router.get("/posts/all", async (req, res) => {
     const posts = await db.posts.findAll({
-        include: [{model: db.users, as: "user"}]
+        include: [{model: db.users, as: "user"}, {model: db.replies, as: "replies", include: {model: db.users, as: "user"}}]
     });
     res.send(posts);
 });
@@ -24,7 +24,7 @@ router.post("/posts/new", async (req, res) => {
 })
 
 // Get a single post using ID
-router.get("/post/:id", (req, res) => {
+router.get("/posts/:id", (req, res) => {
     db.posts.findAll({
         where: {
             post_id: req.params.post_id

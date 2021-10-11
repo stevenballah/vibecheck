@@ -11,7 +11,7 @@ const useRegisterForm = (validate) => {
       password: "",
       password2: "",
       account_created: "",
-      profile_pic_url: ""
+      profile_pic_url: null
     }
   );
   const [errors, setErrors] = useState({});

@@ -5,7 +5,18 @@ const db = require("../models");
 // Get all replies in the database
 router.get("/replies/all", async (req, res) => {
     const replies = await db.replies.findAll({
-        include: [{model: db.replies, as: "user"}]
+        include: [{model: db.replies, as: "replies"}]
+    });
+    res.send(replies);
+});
+
+// Get all replies in the database
+router.get("/replies/:post_id", async (req, res) => {
+    const replies = await db.replies.findAll({
+        where: {
+            post_id: req.params.post_id
+        },
+        include: {model: db.users, as: "user"}
     });
     res.send(replies);
 });

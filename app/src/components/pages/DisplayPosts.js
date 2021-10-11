@@ -42,9 +42,9 @@ export default function DisplayPosts() {
               <div className="post-body">
                 <p>{post.message}</p>
               </div>
-              {post.image ? (
+              {post.image_url ? (
                 <div className="post-image text-center mb-3">
-                  <img src={post.image} className="rounded img-fluid shadow" alt={post.image}></img>
+                  <img src={post.image_url} className="rounded img-fluid shadow" alt={post.image}></img>
                 </div>
               ) : null}
               <div className="row px-3 post-details">

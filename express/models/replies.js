@@ -2,18 +2,15 @@ const db = require(".");
 
 module.exports = (sequelize, DataTypes) => {
     const replies = sequelize.define("replies", {
+        id: {
+            type: DataTypes.INTEGER,
+            autoIncrement: true,
+            primaryKey: true
+        },
         reply_id: {
             type: DataTypes.STRING,
             allowNull: false,
             primaryKey: true
-        },
-        post_id: {
-            type: DataTypes.STRING,
-            allowNull: false,
-        },
-        user_id: {
-            type: DataTypes.STRING,
-            allowNull: false,
         },
         message: {
             type: DataTypes.STRING,
@@ -27,14 +24,6 @@ module.exports = (sequelize, DataTypes) => {
         // Removes the timestamp attributes (updatedAt, createdAt)
         timestamps: false
     });
-
-    // replies.associate = models => {
-    //     replies.belongsToMany(models.posts, {
-    //         through: "post_replies",
-    //         as: "replyid",
-    //         foreignKey: "reply_id"
-    //     });
-    // }
 
     return replies;
 }

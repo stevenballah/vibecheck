@@ -31,6 +31,46 @@ Object.keys(db).forEach(modelName => {
   }
 });
 
+
+//--- ONE TO MANY --- || One user has many posts and a post can belong to one user //
+// db.users.hasMany(db.posts, {
+//   foreignKey: {
+//     name: "user_id",
+//     allowNull: false
+//   }
+// });
+db.posts.belongsTo(db.users, {
+  foreignKey: {
+    name: "user_id"
+  }
+});
+
+//THE FOREIGN KEY POINTS TO THE {PK} IN THE POSTS MODEL
+//THE TARGET KEY POINTS TO THE UNIQUE KEY IN THE POSTS MODEL
+db.posts.hasMany(db.replies, {
+  foreignKey: "post_id",
+  sourceKey: "post_id"
+});
+
+db.replies.belongsTo(db.users, {
+  foreignKey: {
+    name: "user_id"
+  }
+});
+
+//--- ONE TO MANY --- || A user has many replies and many replies can belong to one user //
+// db.users.hasMany(db.replies, {
+//   foreignKey: "user_id"
+// });
+// db.replies.belongsTo(db.users, {
+//   foreignKey: {
+//     name: "user_id",
+//     allowNull: false
+//   }
+// });
+
+
+
 db.sequelize = sequelize;
 db.Sequelize = Sequelize;
 

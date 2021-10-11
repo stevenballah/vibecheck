@@ -30,7 +30,7 @@ function ReplyPost() {
               <div className="post-author profile">
                 <div className="row mx-1">
                   <div className="col-sm-2 col-md-2 col-lg-1">
-                    <img src={post.user.profile_pic_url} alt="user" className="w-100 profile-pic"></img>
+                    <img src={post.user.profile_pic_url ? post.user.profile_pic_url : user} alt="user" className="w-100 profile-pic"></img>
                   </div>
                   <p className="mb-0 my-auto font">
                     {post.user.firstname} {post.user.lastname} posted
@@ -45,9 +45,9 @@ function ReplyPost() {
               <div className="post-body">
                 <p>{post.message}</p>
               </div>
-              {post.image ? (
+              {post.image_url ? (
                 <div className="post-image text-center mb-3">
-                  <img src={post.image} className="rounded img-fluid shadow" alt={post.image}></img>
+                  <img src={post.image_url} className="rounded img-fluid shadow" alt={post.image}></img>
                 </div>
               ) : null}
               
@@ -78,7 +78,7 @@ function ReplyPost() {
       })}
 
       {replies.map((reply, index) => {
-        const currentPostId = reply.replyto;
+        const currentPostId = reply.post_id;
 
         if (id === currentPostId) {
           return (
@@ -89,12 +89,12 @@ function ReplyPost() {
               <div className="reply-author">
                 <div className="row mx-1">
                   <div className="col-sm-2 col-md-2 col-lg-1">
-                    <img src={user} alt="user" className="w-100"></img>
+                    <img src={reply.user.profile_pic_url ? reply.user.profile_pic_url : user} alt="user" className="w-100 profile-pic"></img>
                   </div>
                   <p className="mb-0 my-auto font">
                     {reply.user.firstname} {reply.user.lastname} replied
                   </p>
-                  <p className="mb-0 my-auto ml-auto">{reply.datetime}</p>
+                  <p className="mb-0 my-auto ml-auto">{dateformat(reply.timestamp, "mmmm dS, yyyy - h:MM TT")}</p>
                 </div>
                 <hr></hr>
               </div>
