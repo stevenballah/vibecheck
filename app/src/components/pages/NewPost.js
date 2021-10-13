@@ -13,18 +13,26 @@ export default function NewPost() {
     image,
     loading,
     uploadImage,
+    chars,
+    titleChar
   } = usePostForm(currentUser);
   return (
     <form onSubmit={handleSubmit}>
       <div className="container bg-light rounded p-3">
-        <input
-          className="form-control mb-2"
-          type="text"
-          placeholder="Title"
-          name="title"
-          value={fields.title}
-          onChange={onChangeHandle}
-        ></input>
+        <div className="input-group mb-3">
+          <input
+            className="form-control"
+            type="text"
+            placeholder="Title"
+            name="title"
+            value={fields.title}
+            maxLength="100"
+            onChange={onChangeHandle}
+          ></input>
+          <div className="input-group-append">
+            <span className="input-group-text">{titleChar}/100</span>
+          </div>
+        </div>
         <textarea
           className="form-control mb-3"
           type="text"
@@ -33,7 +41,9 @@ export default function NewPost() {
           name="message"
           value={fields.message}
           onChange={onChangeHandle}
+          maxLength="600"
         ></textarea>
+        <p className={chars < 100 ? "text-danger" : "text-secondary"}>{chars} characters remaining</p>
 
         <div className="upload">
           <input

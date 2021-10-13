@@ -14,7 +14,9 @@ import NewPost from "./components/pages/NewPost";
 import ReplyPost from "./components/pages/ReplyPost";
 import DisplayPosts from "./components/pages/DisplayPosts";
 import EditPost from "./components/pages/EditPost";
+import Explore from "./components/pages/Explore";
 import { getUserInfo } from "./components/includes/repository";
+
 
 function App() {
   const [currentUser, setCurrentUser] = useState(null);
@@ -68,6 +70,9 @@ function App() {
                   </Route>
                   <Route path="/forum/posts/:id">
                     <ReplyPost />
+                  </Route>
+                  <Route path="/forum/explore">
+                    <Explore />
                   </Route>
                 </div>
               </div>

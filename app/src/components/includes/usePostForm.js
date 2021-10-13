@@ -1,14 +1,25 @@
 import { useState, useContext, useEffect } from "react";
 import { useHistory } from "react-router";
 import UserContext from "./UserContext";
-import { getAllPosts, createNewPost } from "./repository"
+import { createNewPost, getAllPosts, removePost } from "./repository"
 
 const usePostForm = () => {
   let history = useHistory();
   const { currentUser, userInfo } = useContext(UserContext);
 
-  const [entries, setEntries] = useState([]);
+
   const [errors, setErrors] = useState("");
+  const [chars, setChars] = useState(600);
+  const [titleChar, setTitleChar] = useState(0);
+  const [posts, setPosts] = useState([]);
+
+  const fetchPost = async () => {
+    const posts = await getAllPosts();
+    if (posts) {
+      setPosts(posts);
+    }
+    console.log(posts);
+  }
 
   const [fields, setFields] = useState({
     post_id: "",
@@ -46,28 +57,13 @@ const usePostForm = () => {
       return;
     }
   };
-  
-  //USE EFFECT GETS CALLED ONCE TO GET ALL POSTS FROM DB
-  useEffect(() => {
-    const getPosts = async () => {
-      const posts = await getAllPosts();
-      if (posts) {
-        setEntries(posts);
-      }
-      console.log(posts);
-    }
-    getPosts();
-  }, []);
 
-  //USES THE INDEX PARAMETER TO DETERMINE THE POST TO DELETE
-  const removePost = (index) => {
-    // const newPosts = [...entries.slice(0, index), ...entries.slice(index + 1)];
-    // setEntries(newPosts);
-    // setPostsToStorage(newPosts);
-  };
-
-  const handleDeleteClick = (index) => (e) => {
-    removePost(index);
+  const handleDeleteClick = (post_id, index) => (e) => {
+    //REMOVES THE POST BASED ON THE INDEX IN THE USESTATE OF POSTS FETCHED FROM DB
+    const newPosts = [...posts.slice(0, index), ...posts.slice(index + 1)];
+    console.log(newPosts);
+    setPosts(newPosts);
+    removePost(post_id);
   };
 
   const handleSubmit = async (e) => {
@@ -81,7 +77,6 @@ const usePostForm = () => {
       if (await createNewPost(fields)){
         history.push("/forum/posts");
       }
-      
     }
   };
 
@@ -91,6 +86,18 @@ const usePostForm = () => {
       ...fields,
       [name]: value,
     });
+
+    if (name === "message") {
+      //ON CHANGE HANDLE LIMIT CHARACTER
+      var input = e.target.value;
+      var max_chars = 600;
+      setChars(max_chars - input.length);
+    }
+    if (name === "title") {
+      //ON CHANGE HANDLE LIMIT CHARACTER
+      var input = e.target.value;
+      setTitleChar(input.length);
+    }
   };
 
   return {
@@ -98,12 +105,15 @@ const usePostForm = () => {
     onChangeHandle,
     fields,
     errors,
-    entries,
+    posts,
     handleDeleteClick,
     image,
     loading,
     uploadImage,
     setImage,
+    chars,
+    titleChar,
+    fetchPost
   };
 };
 

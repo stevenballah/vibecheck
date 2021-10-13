@@ -89,6 +89,12 @@ async function getAllPosts() {
   return res.data;
 }
 
+//API CALL TO GET ALL POSTS IN THE DB
+async function getPost(post_id) {
+  const res = await api.get(`/posts/get/${post_id}`);
+  return res.data;
+}
+
 //ADD POST TO DB
 async function createNewPost(fields) {
   const request = {
@@ -105,6 +111,10 @@ async function createNewPost(fields) {
   return response.data;
 }
 
+async function removePost(post_id) {
+  await api.delete(`/posts/delete/${post_id}`);
+}
+
 //ADD REPLY TO DB
 async function createNewReply(fields) {
   const request = {
@@ -115,9 +125,7 @@ async function createNewReply(fields) {
     timestamp: new Date()
   }
 
-  const response = await api.post("/replies/new", request);
-
-  return response.data;
+  await api.post("/replies/new", request);
 }
 
 //API CALL TO GET THE REPLIES TO A POST
@@ -164,5 +172,7 @@ export {
   getAllPosts,
   createNewPost,
   createNewReply,
-  getReplies
+  getReplies,
+  removePost,
+  getPost
 };

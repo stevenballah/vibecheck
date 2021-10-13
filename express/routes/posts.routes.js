@@ -24,21 +24,23 @@ router.post("/posts/new", async (req, res) => {
 })
 
 // Get a single post using ID
-router.get("/posts/:id", (req, res) => {
-    db.posts.findAll({
+router.get("/posts/get/:post_id", async (req, res) => {
+    const post = await db.posts.findOne({
         where: {
             post_id: req.params.post_id
-        }
-    }).then(getPost => res.send(getPost));
+        },
+        include: [{model: db.users, as: "user"}, {model: db.replies, as: "replies", include: {model: db.users, as: "user"}}]
+    });
+    res.send(post);
 })
 
 // Delete a post
-router.delete("/delete/:post_id", (req, res) => {
+router.delete("/posts/delete/:post_id", (req, res) => {
     db.posts.destroy({
         where: {
             post_id: req.params.post_id
         }
-    }).then(() => res.send("user deleted"));
+    });
 })
 
 // Edit a post
