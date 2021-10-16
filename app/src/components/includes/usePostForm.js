@@ -1,4 +1,4 @@
-import { useState, useContext, useEffect } from "react";
+import { useState, useContext } from "react";
 import { useHistory } from "react-router";
 import UserContext from "./UserContext";
 import { createNewPost, getAllPosts, removePost } from "./repository"
@@ -18,7 +18,6 @@ const usePostForm = () => {
     if (posts) {
       setPosts(posts);
     }
-    console.log(posts);
   }
 
   const [fields, setFields] = useState({
@@ -87,15 +86,15 @@ const usePostForm = () => {
       [name]: value,
     });
 
+    var input = e.target.value;
+
     if (name === "message") {
       //ON CHANGE HANDLE LIMIT CHARACTER
-      var input = e.target.value;
       var max_chars = 600;
       setChars(max_chars - input.length);
     }
     if (name === "title") {
       //ON CHANGE HANDLE LIMIT CHARACTER
-      var input = e.target.value;
       setTitleChar(input.length);
     }
   };

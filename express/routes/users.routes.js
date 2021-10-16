@@ -4,8 +4,12 @@ const db = require("../models");
 const argon2 = require("argon2");
 
 // Get all users in the database
-router.get("/users/all", (req, res) => {
-    db.users.findAll().then(users => res.send(users))
+router.get("/users/all", async (req, res) => {
+    const users = await db.users.findAll({
+        include: [{model: db.following}],
+        attributes: ["user_id", "firstname", "lastname", "profile_pic_url", "email", "account_created"]
+    });
+    res.send(users);
 });
 
 // Create new user

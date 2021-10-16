@@ -1,6 +1,5 @@
-import React, { useState, useEffect } from "react";
-import { Link, useParams } from "react-router-dom";
-import usePostForm from "../includes/usePostForm";
+import React, { useEffect } from "react";
+import { Link } from "react-router-dom";
 import user from "../images/user.png";
 import useReplyForm from "../includes/useReplyForm";
 import dateformat from "dateformat";

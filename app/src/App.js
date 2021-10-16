@@ -30,15 +30,16 @@ function App() {
     setUserInfo([]);  //CLEAR THE DATA FROM useState
   };
 
-  const userInfoChanged = async () => {
-    const result = await getUserInfo(currentUser);
-    setUserInfo(result);
-  }
+  
 
   //ONCE USER IS LOGGED IN GET ALL THE USER INFO FROM DB AND STORE IN USESTATE
   //THIS ALLOW USER INFO TO BE GLOBALLY ACCESSIBLE
   useEffect(() => {
     if (currentUser !== null) {
+      const userInfoChanged = async () => {
+        const result = await getUserInfo(currentUser);
+        setUserInfo(result);
+      }
       userInfoChanged();
     }
   }, [currentUser]);

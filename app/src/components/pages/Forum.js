@@ -1,4 +1,4 @@
-import React, {useEffect} from "react";
+import React from "react";
 import { NavLink } from "react-router-dom";
 
 export default function Forum() {
@@ -16,7 +16,7 @@ export default function Forum() {
             Explore
           </NavLink>
           <NavLink
-            to="/forum/posts"
+            exact to="/forum/posts"
             className="flex-sm-fill text-sm-center nav-link mx-1"
             activeClassName="active"
           >

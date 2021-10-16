@@ -9,7 +9,6 @@ export default function Settings() {
   const { errors, onChangeHandle, handleSubmit, field, setModal, isSuccess } =
     SettingsModal(userInfo.user_id);
 
-  const [image, setImage] = useState("");
   const [loading, setLoading] = useState(false);
 
   //CALLING A IMGBB FREE IMAGE HOST API
@@ -28,7 +27,6 @@ export default function Settings() {
       );
       const file = await result.json();
       const url = file.data.url;
-      setImage(url);
 
       uploadProfilePic(url, userInfo.user_id);
       setUserInfo({ ...userInfo, profile_pic_url: url });

@@ -31,14 +31,8 @@ Object.keys(db).forEach(modelName => {
   }
 });
 
+// --- SQL ASSOCIATIONS --- //
 
-//--- ONE TO MANY --- || One user has many posts and a post can belong to one user //
-// db.users.hasMany(db.posts, {
-//   foreignKey: {
-//     name: "user_id",
-//     allowNull: false
-//   }
-// });
 db.posts.belongsTo(db.users, {
   foreignKey: {
     name: "user_id"
@@ -49,7 +43,9 @@ db.posts.belongsTo(db.users, {
 //THE TARGET KEY POINTS TO THE UNIQUE KEY IN THE POSTS MODEL
 db.posts.hasMany(db.replies, {
   foreignKey: "post_id",
-  sourceKey: "post_id"
+  sourceKey: "post_id",
+  onDelete: 'cascade',
+  hooks: true
 });
 
 db.replies.belongsTo(db.users, {
@@ -58,18 +54,36 @@ db.replies.belongsTo(db.users, {
   }
 });
 
-//--- ONE TO MANY --- || A user has many replies and many replies can belong to one user //
-// db.users.hasMany(db.replies, {
-//   foreignKey: "user_id"
-// });
-// db.replies.belongsTo(db.users, {
-//   foreignKey: {
-//     name: "user_id",
-//     allowNull: false
-//   }
-// });
+db.posts.hasMany(db.post_likes, {
+  foreignKey: "post_id",
+  sourceKey: "post_id"
+});
+db.post_likes.belongsTo(db.users, {
+  foreignKey: {
+    name: "user_id"
+  }
+});
 
+db.posts.hasMany(db.post_dislikes, {
+  foreignKey: "post_id",
+  sourceKey: "post_id"
+});
+db.post_dislikes.belongsTo(db.users, {
+  foreignKey: {
+    name: "user_id"
+  }
+});
 
+db.users.hasMany(db.following, {
+  foreignKey: "user_id",
+  sourceKey: "user_id"
+});
+db.following.belongsTo(db.users, {
+  foreignKey: {
+    name: "following_id",
+    as: "user_id"
+  }
+});
 
 db.sequelize = sequelize;
 db.Sequelize = Sequelize;

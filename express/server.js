@@ -20,6 +20,12 @@ app.use("/api", postsRoutes)
 const replyRoutes = require("./routes/replies.routes");
 app.use("/api", replyRoutes)
 
+const postRatingRoutes = require("./routes/post_rating.routes");
+app.use("/api", postRatingRoutes)
+
+const followingRoutes = require("./routes/follow.routes");
+app.use("/api", followingRoutes)
+
 db.sequelize.sync().then(() => {
   app.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}.`);

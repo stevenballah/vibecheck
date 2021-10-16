@@ -1,5 +1,4 @@
 import api from "../../api/api";
-const USERS_KEY = "users";
 
 //API CALL TO GET ALL USERS IN THE DB
 const getAllUsers = async () => {
@@ -111,8 +110,93 @@ async function createNewPost(fields) {
   return response.data;
 }
 
+//REMOVE POST
 async function removePost(post_id) {
   await api.delete(`/posts/delete/${post_id}`);
+}
+
+//EDIT POST
+async function editPost(fields, post_id) {
+  const request = {
+    title: fields.title,
+    message: fields.message,
+    timestamp: new Date()
+  }
+  const response = await api.put(`/posts/edit/${post_id}`, request);
+  return response.data;
+}
+
+//ADD LIKE TO DB
+async function addLikeToDB(post_id, user_id) {
+  const request = {
+    post_id: post_id,
+    user_id: user_id,
+    timestamp: new Date()
+  }
+
+  const response = await api.post("/post_like/new", request);
+  return response.data;
+}
+
+//REMOVE LIKE FROM DB
+async function removeLikeFromDB(post_id, user_id) {
+  await api.delete(`/post_like/delete/${post_id}/${user_id}`);
+}
+
+async function getUserLikes(user_id) {
+  const response = await api.get(`/post_likes/all/${user_id}`);
+  return response.data;
+}
+
+//ADD DISLIKE TO DB
+async function addDislikeToDB(fields) {
+  const request = {
+    post_id: fields.post_id,
+    user_id: fields.user_id,
+    timestamp: new Date()
+  }
+
+  const response = await api.post("/post_dislike/new", request);
+  return response.data;
+}
+
+//REMOVE DISLIKE FROM DB
+async function removeDislikeFromDB(post_id, user_id) {
+  await api.delete(`/post_dislike/delete/${post_id}/${user_id}`);
+}
+
+//FOLLOW USER
+async function followUser(fields) {
+  const request = {
+    following_id: fields.following_id,
+    user_id: fields.user_id,
+    timestamp: new Date()
+  }
+
+  const response = await api.post("/follow", request);
+  return response.data;
+}
+
+//UNFOLLOW USER
+async function unfollowUser(fields) {
+  const request = {
+    following_id: fields.following_id,
+    user_id: fields.user_id
+  }
+
+  await api.post("/unfollow", request);
+}
+
+//GET ALL USERS WHO THE USER IS FOLLOWING
+async function getUsersFollowing(user_id) {
+  const response = await api.get(`/following/all/${user_id}`);
+  return response.data;
+}
+
+//GET ALL USERS FOLLOWERS
+async function getUserFollowers(user_id) {
+  const response = await api.get(`/followers/all/${user_id}`);
+  return response.data;
 }
 
 //ADD REPLY TO DB
@@ -174,5 +258,15 @@ export {
   createNewReply,
   getReplies,
   removePost,
-  getPost
+  editPost,
+  getPost,
+  addLikeToDB,
+  removeLikeFromDB,
+  addDislikeToDB,
+  removeDislikeFromDB,
+  followUser,
+  unfollowUser,
+  getUsersFollowing,
+  getUserFollowers,
+  getUserLikes,
 };
