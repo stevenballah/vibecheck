@@ -1,8 +1,10 @@
-import logo from "./logo.svg";
 import "./App.css";
 import { BrowserRouter as Router, Route, Switch, Redirect } from "react-router-dom";
 import Nav from "./components/includes/Nav";
 import Dashboard from "./components/pages/Dashboard";
+import UserTables from "./components/pages/UserTables";
+import EditUser from "./components/pages/EditUser";
+import Tables from "./components/pages/Tables";
 
 function App() {
   return (
@@ -20,6 +22,15 @@ function App() {
               </Route>
               <Route exact path="/Dashboard">
                 <Dashboard />
+              </Route>
+              <Route exact path="/Tables">
+                <Tables />
+              </Route>
+              <Route exact path="/Tables/users">
+                <UserTables/>
+              </Route>
+              <Route exact path="/Tables/users/edit/:user_id">
+                <EditUser />
               </Route>
 
             </Switch>
