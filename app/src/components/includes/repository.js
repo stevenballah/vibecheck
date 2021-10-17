@@ -127,11 +127,11 @@ async function editPost(fields, post_id) {
 }
 
 //ADD LIKE TO DB
-async function addLikeToDB(post_id, user_id) {
+async function addLikeToDB(fields) {
   const request = {
-    post_id: post_id,
-    user_id: user_id,
-    timestamp: new Date()
+    post_id: fields.post_id,
+    user_id: fields.user_id,
+    timestamp: fields.timestamp
   }
 
   const response = await api.post("/post_like/new", request);
@@ -139,12 +139,17 @@ async function addLikeToDB(post_id, user_id) {
 }
 
 //REMOVE LIKE FROM DB
-async function removeLikeFromDB(post_id, user_id) {
-  await api.delete(`/post_like/delete/${post_id}/${user_id}`);
+async function removeLikeFromDB(fields) {
+  await api.delete(`/post_like/delete/${fields.post_id}/${fields.user_id}`);
 }
 
 async function getUserLikes(user_id) {
   const response = await api.get(`/post_likes/all/${user_id}`);
+  return response.data;
+}
+
+async function getUserDislikes(user_id) {
+  const response = await api.get(`/post_dislikes/all/${user_id}`);
   return response.data;
 }
 
@@ -153,7 +158,7 @@ async function addDislikeToDB(fields) {
   const request = {
     post_id: fields.post_id,
     user_id: fields.user_id,
-    timestamp: new Date()
+    timestamp: fields.timestamp
   }
 
   const response = await api.post("/post_dislike/new", request);
@@ -161,8 +166,8 @@ async function addDislikeToDB(fields) {
 }
 
 //REMOVE DISLIKE FROM DB
-async function removeDislikeFromDB(post_id, user_id) {
-  await api.delete(`/post_dislike/delete/${post_id}/${user_id}`);
+async function removeDislikeFromDB(fields) {
+  await api.delete(`/post_dislike/delete/${fields.post_id}/${fields.user_id}`);
 }
 
 //FOLLOW USER
@@ -269,4 +274,5 @@ export {
   getUsersFollowing,
   getUserFollowers,
   getUserLikes,
+  getUserDislikes
 };

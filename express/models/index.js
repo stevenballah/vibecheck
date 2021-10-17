@@ -56,7 +56,9 @@ db.replies.belongsTo(db.users, {
 
 db.posts.hasMany(db.post_likes, {
   foreignKey: "post_id",
-  sourceKey: "post_id"
+  sourceKey: "post_id",
+  onDelete: 'cascade',
+  hooks: true
 });
 db.post_likes.belongsTo(db.users, {
   foreignKey: {
@@ -66,7 +68,9 @@ db.post_likes.belongsTo(db.users, {
 
 db.posts.hasMany(db.post_dislikes, {
   foreignKey: "post_id",
-  sourceKey: "post_id"
+  sourceKey: "post_id",
+  onDelete: 'cascade',
+  hooks: true
 });
 db.post_dislikes.belongsTo(db.users, {
   foreignKey: {

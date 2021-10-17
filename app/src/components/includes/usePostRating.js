@@ -4,57 +4,78 @@ import {
   removeLikeFromDB,
   addDislikeToDB,
   removeDislikeFromDB,
-  getUserLikes
+  getUserLikes,
+  getUserDislikes
 } from "./repository";
 import UserContext from "./UserContext";
 
 const usePostRating = () => {
-  const [like, setLike] = useState(false);
-  const [dislike, setDislike] = useState(false);
+  const [likes, setLikes] = useState([]);
+  const [dislikes, setDislikes] = useState([]);
   const [isRate, setIsRate] = useState(false);
-  const [userLikes, setUserLikes] = useState([]);
-
   const { userInfo } = useContext(UserContext);
 
-  const [fields, setFields] = useState({
-    user_id: userInfo.user_id,
-    post_id: "",
-    timestamp: new Date(),
-  });
+  //GET ALL USERS LIKES ON POSTS
+  const fetchLikes = async (user_id) => {
+    const likes = await getUserLikes(user_id);
+    if (likes) {
+      setLikes(likes);
+    }
+  };
 
   const addLike = (post_id, user_id) => () => {
-    addLikeToDB(post_id, user_id);
-    console.log("added LIKE to db");
+    const fields = {
+      post_id: post_id,
+      user_id: user_id,
+      timestamp: new Date(),
+    };
+
+    addLikeToDB(fields);
+    setLikes([...likes, fields]);
   };
 
   const removeLike = (post_id, user_id) => () => {
-    removeLikeFromDB(post_id, user_id);
-    console.log("removed LIKE db");
-  };
-
-  const fetchLikes = async (user_id) => {
-    const likes = await getUserLikes(user_id);
-    setUserLikes(likes);
-    console.log(likes);
-  };
-
-  const addDislike = (post_id) => (e) => {
-    setDislike((prevState) => !prevState);
-    setIsRate(true);
-    setFields({
-      user_id: userInfo.user_id,
+    const fields = {
       post_id: post_id,
-      timestamp: new Date(),
-    });
+      user_id: user_id
+    };
+
+    removeLikeFromDB(fields);
+    const unLike = likes.filter(pid => pid.post_id !== post_id);
+    console.log(unLike);
+    setLikes(unLike);
   };
 
-  const removeDislike = (post_id) => (e) => {
-    setIsRate(true);
-    setFields({
-      user_id: userInfo.user_id,
+
+  //GET ALL USERS DISLIKES ON POSTS
+  const fetchDislikes = async (user_id) => {
+    const dislikes = await getUserDislikes(user_id);
+    if (dislikes) {
+      setDislikes(dislikes);
+    }
+  };
+
+  const addDislike = (post_id, user_id) => () => {
+    const fields = {
       post_id: post_id,
+      user_id: user_id,
       timestamp: new Date(),
-    });
+    };
+
+    addDislikeToDB(fields);
+    setDislikes([...dislikes, fields]);
+  };
+
+  const removeDislike = (post_id, user_id) => () => {
+    const fields = {
+      post_id: post_id,
+      user_id: user_id
+    };
+
+    removeDislikeFromDB(fields);
+    const unDislike = dislikes.filter(pid => pid.post_id !== post_id);
+    console.log(unDislike);
+    setDislikes(unDislike);
   };
 
   return {
@@ -62,9 +83,10 @@ const usePostRating = () => {
     addDislike,
     removeLike,
     removeDislike,
+    likes,
+    dislikes,
     fetchLikes,
-    userLikes,
-    isRate
+    fetchDislikes
   };
 };
 

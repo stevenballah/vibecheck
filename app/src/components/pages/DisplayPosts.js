@@ -1,4 +1,4 @@
-import React, { useContext, useEffect } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import usePostForm from "../includes/usePostForm";
 import UserContext from "../includes/UserContext";
 import user from "../images/user.png";
@@ -8,7 +8,7 @@ import usePostRating from "../includes/usePostRating";
 
 export default function DisplayPosts() {
   const { posts, handleDeleteClick, fetchPost } = usePostForm();
-  const { addLike, removeLike, addDislike, removeDislike, fetchLikes, userLikes } =
+  const { addLike, removeLike, addDislike, removeDislike, fetchLikes, likes, dislikes, fetchDislikes } =
     usePostRating();
   const { userInfo } = useContext(UserContext);
 
@@ -16,8 +16,8 @@ export default function DisplayPosts() {
   useEffect(() => {
     fetchPost();
     fetchLikes(userInfo.user_id);
+    fetchDislikes(userInfo.user_id);
   }, []);
-
 
   const renderPostLikes = (user_likes, post_id, post_likes) => {
     //IF THE USER LIKES THE POST
@@ -49,29 +49,29 @@ export default function DisplayPosts() {
     }
   };
 
-  const renderPostDislikes = (dislikes, post_id) => {
+  const renderPostDislikes = (dislikes, post_id, post_dislikes) => {
     //IF THE USER LIKES THE POST
-    if (dislikes.some((user) => user.user_id === userInfo.user_id)) {
+    if (dislikes.some((post) => post.post_id === post_id)) {
       return (
         <button
           className="btn btn-light mr-2"
-          onClick={removeDislike(post_id)}
+          onClick={removeDislike(post_id, userInfo.user_id)}
         >
           <div className="text-primary">
             <i className="fas fa-thumbs-down"></i>
             <div className="badge badge-pill badge-primary ml-1">
-              {dislikes.length}
+              {post_dislikes.length}
             </div>
           </div>
         </button>
       );
     } else {
       return (
-        <button className="btn btn-light mr-2" onClick={addDislike(post_id)}>
+        <button className="btn btn-light mr-2" onClick={addDislike(post_id, userInfo.user_id)}>
           <div className="text-dark">
             <i className="fas fa-thumbs-down"></i>
             <div className="badge badge-pill badge-dark ml-1">
-              {dislikes.length}
+              {post_dislikes.length}
             </div>
           </div>
         </button>
@@ -138,9 +138,9 @@ export default function DisplayPosts() {
                     <div className="mr-auto ml-3">
 
                       {/* CHECK IF CURRENT USER LIKES THE POST */}
-                      {renderPostLikes(userLikes, post.post_id, post.post_likes)}
-                      {renderPostDislikes(post.post_dislikes, post.post_id)}
-
+                      {renderPostLikes(likes, post.post_id, post.post_likes)}
+                      {renderPostDislikes(dislikes, post.post_id, post.post_dislikes)}
+                      
                       <div className="d-inline mr-2">
                         <i className="fas fa-comment"></i>
                         <div className="badge badge-pill badge-dark ml-1">
@@ -182,8 +182,8 @@ export default function DisplayPosts() {
                   <div className="row">
                     <div className="mr-auto ml-3">
                       {/* CHECK IF CURRENT USER LIKES THE POST */}
-                      {renderPostLikes(userLikes, post.post_id, post.post_likes)}
-                      {renderPostDislikes(post.post_dislikes, post.post_id)}
+                      {renderPostLikes(likes, post.post_id, post.post_likes)}
+                      {renderPostDislikes(dislikes, post.post_id, post.post_dislikes)}
 
                       <div className="d-inline mr-2">
                         <i className="fas fa-comment"></i>
