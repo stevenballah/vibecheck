@@ -1,4 +1,4 @@
-# ✅ VibeCheck Assignment 2 - FWP
+# ✅ VibeCheck
 
 This project was developed by Steven Ballah (s3843284)
 
